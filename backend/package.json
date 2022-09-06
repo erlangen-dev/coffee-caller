@@ -2,12 +2,10 @@
   "name": "coffee-caller-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "serve": "node_modules/.bin/nodemon",
     "start": "ts-node ./src/main.ts"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^7.3.0",
