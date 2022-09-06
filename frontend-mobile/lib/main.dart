@@ -1,8 +1,5 @@
-import 'dart:convert';
-
+import 'package:coffee_caller/socket_client.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
   runApp(const App());
@@ -33,38 +30,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late IO.Socket socket;
   List<String> messages = [];
+  final SocketClient client = SocketClient();
 
   @override
   void initState() {
     super.initState();
-    initSocket();
-  }
-
-  void initSocket() {
-    socket = IO.io("ws://localhost:4200/", <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    });
-    socket.connect();
-    socket.onConnect((_) {
-      print('Connection established');
-    });
-    socket.on("coffee", (data) {
-      print("Got coffee call");
+    client.init();
+    client.subscribeForCoffeeCalls((data){
       setState(() {
-        messages.add("Got coffee call");
+        messages.add(data);
       });
     });
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
   }
 
   void _sendMessage() {
-    print("Send msg");
-    socket.emit("coffee", "Lets go");
+    client.sendMessage();
   }
 
   @override
