@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:coffee_caller/socket_client.dart';
 import 'package:flutter/material.dart';
 
@@ -33,15 +35,23 @@ class _HomeState extends State<Home> {
   List<String> messages = [];
   final SocketClient client = SocketClient();
 
+  late  StreamSubscription coffeeMessageSubscription;
+
   @override
   void initState() {
     super.initState();
     client.init();
-    client.subscribeForCoffeeCalls((data) {
+    coffeeMessageSubscription = client.coffeMessageStream.listen((data) {
       setState(() {
         messages.add(data);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    coffeeMessageSubscription.cancel();
   }
 
   void _sendMessage() {

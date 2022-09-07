@@ -1,36 +1,49 @@
+import 'dart:async';
+
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 
+enum SocketClientConnectStatus { disconnected, connecting, connected, error }
+
 class SocketClient {
-  final socket_io.Socket socket = socket_io.io('ws://localhost:4200/', <String, dynamic>{
+  Stream<SocketClientConnectStatus> get connectStatusStream =>
+      _statusController.stream;
+
+  Stream<String> get coffeMessageStream => _coffeeMessageController.stream;
+
+  final _statusController = StreamController<SocketClientConnectStatus>();
+  final _coffeeMessageController = StreamController<String>();
+
+  final socket_io.Socket _socket =
+      socket_io.io('ws://localhost:4200/', <String, dynamic>{
     'autoConnect': false,
     'transports': ['websocket']
   });
 
-  List<Function> coffeeCallSubscriptions = [];
 
   void init() {
-    socket.connect();
-    socket.onConnect((_) {
-      print('Connection established');
-    });
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    _statusController.sink.add(SocketClientConnectStatus.connecting);
+    _socket.connect();
 
-    socket.on('coffee', (data) {
-      for (var sub in coffeeCallSubscriptions) {
-        sub(data);
-      }
+    _socket.onConnect((_) {
+      _statusController.sink.add(SocketClientConnectStatus.connected);
     });
+    _socket.onDisconnect(
+      (_) => _statusController.sink.add(SocketClientConnectStatus.disconnected),
+    );
+
+    _socket.onConnectError(
+      (err) => _statusController.sink.add(SocketClientConnectStatus.error),
+    );
+    _socket.onError(
+      (err) => _statusController.sink.add(SocketClientConnectStatus.error),
+    );
+
+    _socket.on('coffee', (data) => _coffeeMessageController.sink.add(data));
   }
 
   void sendMessage() {
-    if (!socket.connected) return;
+    if (!_socket.connected) return;
 
-    socket.emit('coffee', 'Lets go!');
-  }
-
-  void subscribeForCoffeeCalls(Function(String) callback) {
-    coffeeCallSubscriptions.add(callback);
+    _socket.emit('coffee', 'Lets go!');
   }
 }
