@@ -10,15 +10,17 @@ class SocketClient {
 
   Stream<String> get coffeMessageStream => _coffeeMessageController.stream;
 
-  final _statusController = StreamController<SocketClientConnectStatus>();
-  final _coffeeMessageController = StreamController<String>();
+  final socket_io.Socket _socket;
 
-  final socket_io.Socket _socket =
-      socket_io.io('ws://localhost:4200/', <String, dynamic>{
+  SocketClient(String serverUrl) :
+   _socket =
+      socket_io.io(serverUrl, <String, dynamic>{
     'autoConnect': false,
     'transports': ['websocket']
   });
 
+  final _statusController = StreamController<SocketClientConnectStatus>();
+  final _coffeeMessageController = StreamController<String>();
 
   void init() {
     _statusController.sink.add(SocketClientConnectStatus.connecting);
