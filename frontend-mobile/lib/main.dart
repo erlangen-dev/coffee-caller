@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     client.init();
-    client.subscribeForCoffeeCalls((data){
+    client.subscribeForCoffeeCalls((data) {
       setState(() {
         messages.add(data);
       });
@@ -57,9 +57,9 @@ class _HomeState extends State<Home> {
       body: Center(
         child: Column(
           children: [
-            TextButton(onPressed: _sendMessage, child: Text("Send msg")),
+            TextButton(onPressed: _sendMessage, child: const Text('Send msg')),
             ListView.builder(
-              itemBuilder: (BuildContext, index) {
+              itemBuilder: (BuildContext context, index) {
                 return Text(messages[index]);
               },
               padding: const EdgeInsets.all(5),
