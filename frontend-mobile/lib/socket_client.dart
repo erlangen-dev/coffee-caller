@@ -12,12 +12,11 @@ class SocketClient {
 
   final socket_io.Socket _socket;
 
-  SocketClient(String serverUrl) :
-   _socket =
-      socket_io.io(serverUrl, <String, dynamic>{
-    'autoConnect': false,
-    'transports': ['websocket']
-  });
+  SocketClient(String serverUrl)
+      : _socket = socket_io.io(serverUrl, <String, dynamic>{
+          'autoConnect': false,
+          'transports': ['websocket']
+        });
 
   final _statusController = StreamController<SocketClientConnectStatus>();
   final _coffeeMessageController = StreamController<String>();

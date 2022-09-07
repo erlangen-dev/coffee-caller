@@ -14,9 +14,9 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
     required this.socket,
   }) : super(const CoffeeCallState());
 
-  void init()  {
-    socket.connectStatusStream.listen((status)  {
-      switch(status) {
+  void init() {
+    socket.connectStatusStream.listen((status) {
+      switch (status) {
         case SocketClientConnectStatus.disconnected:
           emit(state.copyWith(status: CoffeeCallStatus.disconnected));
           break;
