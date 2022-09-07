@@ -21,7 +21,7 @@ class FakeSocketClient extends Fake implements SocketClient {
       statusController.stream;
 
   @override
-  Stream<String> get coffeMessageStream => messageController.stream;
+  Stream<String> get coffeeMessageStream => messageController.stream;
   
   @override
   void init(){}
