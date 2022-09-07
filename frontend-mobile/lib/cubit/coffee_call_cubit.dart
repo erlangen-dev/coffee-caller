@@ -32,7 +32,7 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
       }
     });
 
-    socket.coffeMessageStream.listen((message) {
+    socket.coffeeMessageStream.listen((message) {
       emit(state.copyWith(messages: [...state.messages, message]));
     });
   }

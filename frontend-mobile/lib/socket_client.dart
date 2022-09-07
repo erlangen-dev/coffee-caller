@@ -8,7 +8,7 @@ class SocketClient {
   Stream<SocketClientConnectStatus> get connectStatusStream =>
       _statusController.stream;
 
-  Stream<String> get coffeMessageStream => _coffeeMessageController.stream;
+  Stream<String> get coffeeMessageStream => _coffeeMessageController.stream;
 
   final socket_io.Socket _socket;
 
