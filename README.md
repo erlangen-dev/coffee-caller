@@ -8,4 +8,11 @@
 * Run `yarn serve` to start backend in watch mode
 * Run `yarn start` to start backend
 
+## Frontend setup
+
+* Install [fvm](https://fvm.app)
+* Run `fvm flutter run` to start the app
+* ???
+* Profit!
+
 Happy coding :)
