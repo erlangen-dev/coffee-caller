@@ -14,7 +14,8 @@ import 'package:coffee_caller/main.dart';
 
 class FakeSocketClient extends Fake implements SocketClient {
   StreamController<String> messageController = StreamController();
-  StreamController<SocketClientConnectStatus> statusController = StreamController();
+  StreamController<SocketClientConnectStatus> statusController =
+      StreamController();
 
   @override
   Stream<SocketClientConnectStatus> get connectStatusStream =>
@@ -22,13 +23,14 @@ class FakeSocketClient extends Fake implements SocketClient {
 
   @override
   Stream<String> get coffeeMessageStream => messageController.stream;
-  
+
   @override
-  void init(){}
+  void init() {}
 }
 
 void main() {
-  testWidgets('Receiving a message prints the message', (WidgetTester tester) async {
+  testWidgets('Receiving a message prints the message',
+      (WidgetTester tester) async {
     final socket = FakeSocketClient();
     await tester.pumpWidget(App(socketClient: socket));
 

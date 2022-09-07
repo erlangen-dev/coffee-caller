@@ -1,0 +1,29 @@
+name: Flutter lint and smoke test
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+defaults:
+  run:
+    working-directory: ./frontend-mobile
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: kuhnroyal/flutter-fvm-config-action@v1
+        with:
+          path: 'frontend-mobile/.fvm/fvm_config.json'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter test
