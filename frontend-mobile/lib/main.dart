@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:coffee_caller/cubit/coffee_call_cubit.dart';
+import 'package:coffee_caller/cubit/coffee_call_state.dart';
 import 'package:coffee_caller/socket_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const App());
@@ -17,68 +20,47 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Home(title: 'Coffee Caller - Home'),
+      home: BlocProvider(
+        create: (_) => CoffeeCallCubit(socket: SocketClient())
+          ..init()
+          ..connect(),
+        child: const Home(title: 'Coffee Caller - Home'),
+      ),
     );
   }
 }
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key, required this.title});
 
   final String title;
 
   @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  List<String> messages = [];
-  final SocketClient client = SocketClient();
-
-  late  StreamSubscription coffeeMessageSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    client.init();
-    coffeeMessageSubscription = client.coffeMessageStream.listen((data) {
-      setState(() {
-        messages.add(data);
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    coffeeMessageSubscription.cancel();
-  }
-
-  void _sendMessage() {
-    client.sendMessage();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            TextButton(onPressed: _sendMessage, child: const Text('Send msg')),
-            ListView.builder(
-              itemBuilder: (BuildContext context, index) {
-                return Text(messages[index]);
-              },
-              padding: const EdgeInsets.all(5),
-              itemCount: messages.length,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-            )
-          ],
-        ),
+      body: Column(
+        children: [
+          TextButton(
+            onPressed: context.read<CoffeeCallCubit>().sendMessage,
+            child: const Text('Send msg'),
+          ),
+          BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
+            builder: (context, state) {
+              return ListView.builder(
+                itemBuilder: (BuildContext context, index) {
+                  return Text(state.messages[index]);
+                },
+                padding: const EdgeInsets.all(5),
+                itemCount: state.messages.length,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              );
+            },
+          )
+        ],
       ),
     );
   }
