@@ -42,6 +42,6 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
   }
 
   void sendMessage() {
-    socket.sendMessage();
+    socket.sendMessage('Lets go');
   }
 }
