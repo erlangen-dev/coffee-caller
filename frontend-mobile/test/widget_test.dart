@@ -34,11 +34,11 @@ void main() {
     final socket = FakeSocketClient();
     await tester.pumpWidget(App(socketClient: socket));
 
-    expect(find.text('Hello World'), findsNothing);
+    expect(find.textContaining('Hello World'), findsNothing);
 
-    socket.messageController.add('Hello World');
+    socket.messageController.add('{"type": "join", "name": "Hello World"}');
     await tester.pump();
 
-    expect(find.text('Hello World'), findsOneWidget);
+    expect(find.text('Hello World joins a coffee call'), findsOneWidget);
   });
 }
