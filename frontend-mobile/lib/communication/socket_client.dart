@@ -42,9 +42,9 @@ class SocketClient {
     _socket.on('coffee', (data) => _coffeeMessageController.sink.add(data));
   }
 
-  void sendMessage() {
+  void sendMessage(String message) {
     if (!_socket.connected) return;
 
-    _socket.emit('coffee', 'Lets go!');
+    _socket.emit('coffee', message);
   }
 }
