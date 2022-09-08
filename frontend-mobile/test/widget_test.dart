@@ -7,7 +7,7 @@
 
 import 'dart:async';
 
-import 'package:coffee_caller/socket_client.dart';
+import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:coffee_caller/main.dart';

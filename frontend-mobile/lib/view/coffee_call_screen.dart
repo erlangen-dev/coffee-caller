@@ -1,4 +1,4 @@
-import 'package:coffee_caller/socket_client.dart';
+import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_cubit.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_state.dart';
 import 'package:flutter/material.dart';
