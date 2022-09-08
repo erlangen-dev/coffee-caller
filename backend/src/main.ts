@@ -10,7 +10,7 @@ const io = new Server(httpServer);
 io.on("connection", (socket) => {
     console.log(`Got new connection: ${socket.id}`);
     socket.on("coffee", (data) => {
-        io.sockets.emit("coffee", "Lets go");
+        io.sockets.emit("coffee", data);
     });
 });
 

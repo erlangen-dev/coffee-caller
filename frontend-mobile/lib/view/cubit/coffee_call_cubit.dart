@@ -1,17 +1,20 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_state.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 
 class CoffeeCallCubit extends Cubit<CoffeeCallState> {
   SocketClient socket;
+  CoffeeCallerProtocol protocol;
 
   late StreamSubscription connectionStatusSubscription;
   late StreamSubscription coffeeMessageSubscription;
 
   CoffeeCallCubit({
     required this.socket,
+    required this.protocol,
   }) : super(const CoffeeCallState());
 
   void init() {
@@ -41,7 +44,15 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
     socket.init();
   }
 
-  void sendMessage() {
-    socket.sendMessage('Lets go');
+  void join() {
+    protocol.join('Zaphod Beeblebrox');
+  }
+
+  void start() {
+    protocol.start('Zaphod Beeblebrox');
+  }
+
+  void leave() {
+    protocol.leave('Zaphod Beeblebrox');
   }
 }
