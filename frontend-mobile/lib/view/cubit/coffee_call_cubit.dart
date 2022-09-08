@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:coffee_caller/cubit/coffee_call_state.dart';
+import 'package:coffee_caller/view/cubit/coffee_call_state.dart';
 import 'package:coffee_caller/socket_client.dart';
 
 class CoffeeCallCubit extends Cubit<CoffeeCallState> {
