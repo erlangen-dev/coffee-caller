@@ -1,5 +1,5 @@
 import 'package:coffee_caller/environment.dart';
-import 'package:coffee_caller/socket_client.dart';
+import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/view/coffee_call_screen.dart';
 import 'package:flutter/material.dart';
 
