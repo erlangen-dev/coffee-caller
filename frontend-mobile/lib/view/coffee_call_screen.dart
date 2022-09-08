@@ -1,3 +1,4 @@
+import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_cubit.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_state.dart';
@@ -19,7 +20,10 @@ class CoffeeCallScreen extends StatelessWidget {
         title: const Text('Coffee Caller'),
       ),
       body: BlocProvider(
-        create: (_) => CoffeeCallCubit(socket: socketClient)
+        create: (_) => CoffeeCallCubit(
+          socket: socketClient,
+          protocol: CoffeeCallerProtocol(socketClient: socketClient),
+        )
           ..init()
           ..connect(),
         child: const CoffeeCallBody(),
@@ -35,9 +39,21 @@ class CoffeeCallBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextButton(
-          onPressed: context.read<CoffeeCallCubit>().sendMessage,
-          child: const Text('Send msg'),
+        Row(
+          children: [
+            TextButton(
+              onPressed: context.read<CoffeeCallCubit>().join,
+              child: const Text('Join'),
+            ),
+            TextButton(
+              onPressed: context.read<CoffeeCallCubit>().leave,
+              child: const Text('Leave'),
+            ),
+            TextButton(
+              onPressed: context.read<CoffeeCallCubit>().start,
+              child: const Text('Start'),
+            ),
+          ],
         ),
         BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
           builder: (context, state) {
