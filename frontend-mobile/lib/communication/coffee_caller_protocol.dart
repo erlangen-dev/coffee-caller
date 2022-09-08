@@ -1,12 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:coffee_caller/communication/models/coffee_caller_message.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 
 class CoffeeCallerProtocol {
-  final SocketClient socketClient;
+  Stream<CoffeeCallerMessage> get messages =>
+      _socketClient.coffeeMessageStream.map(_decodeRawMessage);
 
-  const CoffeeCallerProtocol({required this.socketClient});
+  CoffeeCallerProtocol({required SocketClient socketClient})
+      : _socketClient = socketClient;
+
+  final SocketClient _socketClient;
 
   void join(String username) {
     _send(CoffeeCallerMessageType.join, username);
@@ -22,6 +27,10 @@ class CoffeeCallerProtocol {
 
   void _send(CoffeeCallerMessageType type, String username) {
     final message = CoffeeCallerMessage(type, username);
-    socketClient.sendMessage(jsonEncode(message));
+    _socketClient.sendMessage(jsonEncode(message));
+  }
+
+  CoffeeCallerMessage _decodeRawMessage(String rawMessage) {
+    return CoffeeCallerMessage.fromJson(jsonDecode(rawMessage));
   }
 }
