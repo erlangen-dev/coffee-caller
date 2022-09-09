@@ -1,6 +1,11 @@
 import { io } from 'socket.io-client';
+import { createSignal } from 'solid-js';
 
 const event = 'coffee';
+
+type message = string;
+
+export const [messages, setMessages] = createSignal<message[]>([]);
 
 export function connect() {
     const socket = io('ws://localhost:4200');
@@ -19,6 +24,7 @@ export function connect() {
 
     socket.on(event, (data) => {
         console.log('Coffee message received:', data);
+        setMessages([...messages(), data]);
     });
 
 }
