@@ -2,8 +2,11 @@ import type { Component } from 'solid-js';
 
 import logo from './logo.svg';
 import styles from './App.module.css';
+import { connect } from './socket-client';
 
 const App: Component = () => {
+  connect();
+
   return (
     <div class={styles.App}>
       <header class={styles.header}>
