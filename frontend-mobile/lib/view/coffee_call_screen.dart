@@ -2,6 +2,7 @@ import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_cubit.dart';
 import 'package:coffee_caller/view/cubit/coffee_call_state.dart';
+import 'package:coffee_caller/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +16,19 @@ class CoffeeCallScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Coffee Caller'),
+        actions: [
+          TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+            },
+            icon: const Icon(Icons.settings),
+            label: const Text('Settings'),
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (_) => CoffeeCallCubit(
