@@ -1,4 +1,4 @@
-import { Component, createMemo, For } from 'solid-js';
+import { Component, For } from 'solid-js';
 
 import styles from './App.module.css';
 import { SocketClient } from './socket-client';
@@ -12,6 +12,11 @@ const App: Component = () => {
     <div class={styles.App}>
       <header class={styles.header}>
         <span class={styles.logo}>☕</span>
+        <div class={styles.buttonRow}>
+          <button onClick={() => protocol.join('Spiderpig')}>Join</button>
+          <button onClick={() => protocol.leave('Spiderpig')}>Leave</button>
+          <button onClick={() => protocol.start('Spiderpig')}>Start</button>
+        </div>
         <ul>
           <For each={protocol.messages()}>{(message) =>
             <li>{message.name} {message.type}s a coffee call</li>

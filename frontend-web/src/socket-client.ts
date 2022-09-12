@@ -36,9 +36,9 @@ export class SocketClient {
         });
     }
 
-    public send(message: CallMessage)  {
+    public send(message: string)  {
         assertConnected(this.socket);
-        this.socket.emit('coffee', message);
+        this.socket.emit(event, message);
     }
 }
 
