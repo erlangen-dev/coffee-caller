@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CoffeeCallScreen extends StatelessWidget {
-  final SocketClient socketClient;
-
   const CoffeeCallScreen({
     super.key,
-    required this.socketClient,
   });
 
   @override
@@ -21,8 +18,10 @@ class CoffeeCallScreen extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => CoffeeCallCubit(
-          socket: socketClient,
-          protocol: CoffeeCallerProtocol(socketClient: socketClient),
+          socket: context.read<SocketClient>(),
+          protocol: CoffeeCallerProtocol(
+            socketClient: context.read<SocketClient>(),
+          ),
         )
           ..init()
           ..connect(),
