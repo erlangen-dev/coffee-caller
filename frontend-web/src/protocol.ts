@@ -2,9 +2,10 @@ import { Accessor, createMemo } from "solid-js";
 import { SocketClient } from "./socket-client";
 
 const messageTypes = ['join', 'leave', 'start'] as const;
+type MessageType = typeof messageTypes[number];
 
 export interface CallMessage {
-  type: typeof messageTypes[number];
+  type: MessageType;
   name: string;
 }
 
@@ -21,16 +22,20 @@ export class Protocol {
     );
   }
 
-  public join(name: string, client: SocketClient) {
-    client.send({ type: 'join', name });
+  public join(name: string) {
+    this.sendEvent(name, 'join');
   }
 
-  public leave(name: string, client: SocketClient) {
-    client.send({ type: 'leave', name });
+  public leave(name: string) {
+    this.sendEvent(name, 'leave');
   }
 
-  public start(name: string, client: SocketClient) {
-    client.send({ type: 'start', name });
+  public start(name: string) {
+    this.sendEvent(name, 'start');
+  }
+
+  private sendEvent(name: string, type: MessageType) {
+    this.socket.send(JSON.stringify({name, type}));
   }
 
   private parseRawMessage(rawMessage: string): CallMessage | null {
