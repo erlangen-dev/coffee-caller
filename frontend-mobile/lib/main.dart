@@ -2,6 +2,7 @@ import 'package:coffee_caller/environment.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/view/coffee_call_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   final socketClient = SocketClient(Environment.backendUrl);
@@ -20,8 +21,9 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CoffeeCallScreen(
-        socketClient: socketClient,
+      home: Provider.value(
+        value: socketClient,
+        child: const CoffeeCallScreen(),
       ),
     );
   }
