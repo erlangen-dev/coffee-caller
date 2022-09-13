@@ -2,9 +2,9 @@ import { Component, For } from 'solid-js';
 
 import styles from './App.module.css';
 
-import CoffeeCall from './coffee-call/coffee-call';
+import { CoffeeCall } from './coffee-call/coffee-call';
 
-const App: Component = () => {
+export const App: Component = () => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
@@ -14,5 +14,3 @@ const App: Component = () => {
     </div>
   );
 };
-
-export default App;
