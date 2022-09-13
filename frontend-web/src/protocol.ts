@@ -9,6 +9,8 @@ export interface CallMessage {
   name: string;
 }
 
+type InvalidMessage = 'InvalidMessage';
+
 export class Protocol {
   constructor(private socket: SocketClient) { }
 
@@ -18,7 +20,7 @@ export class Protocol {
         this.socket
           .messages()
           .map(this.parseRawMessage)
-          .filter((elem) => elem !== null) as CallMessage[]
+          .filter(isValidMessage)
     );
   }
 
@@ -35,23 +37,25 @@ export class Protocol {
   }
 
   private sendEvent(name: string, type: MessageType) {
-    this.socket.send(JSON.stringify({name, type}));
+    this.socket.send(JSON.stringify({ name, type }));
   }
 
-  private parseRawMessage(rawMessage: string): CallMessage | null {
+  private parseRawMessage(rawMessage: string): CallMessage | InvalidMessage {
     try {
       const parsedMessage = JSON.parse(rawMessage);
 
       if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {
         console.warn('Invalid message received:', rawMessage);
-        return null;
+        return 'InvalidMessage';
       }
 
       return parsedMessage;
     } catch (e) {
       console.warn('Could not parse message', e);
-      return null;
+      return 'InvalidMessage';
     }
   }
-
 }
+
+const isValidMessage = (message: CallMessage | InvalidMessage)
+  : message is CallMessage => message !== 'InvalidMessage';
