@@ -4,7 +4,7 @@ import styles from './App.module.css';
 import { SocketClient } from './socket-client';
 import { Protocol } from './protocol';
 
-const CoffeeCall: Component = () => {
+export const CoffeeCall: Component = () => {
   const client = new SocketClient();
   const protocol = new Protocol(client);
 
@@ -24,4 +24,3 @@ const CoffeeCall: Component = () => {
   );
 };
 
-export default CoffeeCall;
