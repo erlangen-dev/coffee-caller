@@ -1,6 +1,5 @@
 import { io, Socket } from 'socket.io-client';
 import { Accessor, createSignal, Setter } from 'solid-js';
-import { CallMessage } from './protocol';
 
 const event = 'coffee';
 

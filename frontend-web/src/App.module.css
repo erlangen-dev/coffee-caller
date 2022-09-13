@@ -23,10 +23,6 @@
   color: #b318f0;
 }
 
-.buttonRow > *:not(:first-child) {
-  margin-left: 5px;
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
