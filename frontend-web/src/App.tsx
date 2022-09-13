@@ -10,12 +10,13 @@ export const App: Component = () => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <span class={styles.logo}>☕</span>
+        <h1>CoffeeCaller</h1>
         <nav>
           <NavLink href="/" end={true} >Main</NavLink>
           <NavLink href="/settings">Settings</NavLink>
         </nav>
       </header>
+      <span class={styles.logo}>☕</span>
       <main>
         <Routes>
           <Route path="/" component={CoffeeCall}/>
