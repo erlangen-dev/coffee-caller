@@ -3,7 +3,9 @@
 
   --background: #282c34;
   --background-lighter: #4a5262;
-  --background-lightest: #778197
+  --background-lightest: #778197;
+
+  --confirm-green: #228f22;
 }
 
 body {
