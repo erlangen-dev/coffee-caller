@@ -1,0 +1,5 @@
+.confirm {
+    color: var(--confirm-green);
+    position: relative;
+    top: 3px;
+}
