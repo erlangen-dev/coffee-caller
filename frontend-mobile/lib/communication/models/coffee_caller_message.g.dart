@@ -25,3 +25,19 @@ const _$CoffeeCallerMessageTypeEnumMap = {
   CoffeeCallerMessageType.start: 'start',
   CoffeeCallerMessageType.leave: 'leave',
 };
+
+_$_ReceivedCoffeeCallerMessage _$$_ReceivedCoffeeCallerMessageFromJson(
+        Map<String, dynamic> json) =>
+    _$_ReceivedCoffeeCallerMessage(
+      $enumDecode(_$CoffeeCallerMessageTypeEnumMap, json['type']),
+      json['name'] as String,
+      DateTime.parse(json['broadcastAt'] as String),
+    );
+
+Map<String, dynamic> _$$_ReceivedCoffeeCallerMessageToJson(
+        _$_ReceivedCoffeeCallerMessage instance) =>
+    <String, dynamic>{
+      'type': _$CoffeeCallerMessageTypeEnumMap[instance.type]!,
+      'name': instance.name,
+      'broadcastAt': instance.broadcastAt.toIso8601String(),
+    };

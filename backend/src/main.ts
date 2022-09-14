@@ -15,7 +15,10 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
     console.log(`Got new connection: ${socket.id}`);
     socket.on("coffee", (data) => {
-        io.sockets.emit("coffee", data);
+        io.sockets.emit("coffee", JSON.stringify({
+            ...JSON.parse(data),
+            broadcastAt: new Date().toISOString()
+        }));
     });
 });
 

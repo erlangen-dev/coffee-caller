@@ -15,3 +15,15 @@ class CoffeeCallerMessage with _$CoffeeCallerMessage {
   factory CoffeeCallerMessage.fromJson(Map<String, dynamic> json) =>
       _$CoffeeCallerMessageFromJson(json);
 }
+
+@freezed
+class ReceivedCoffeeCallerMessage with _$ReceivedCoffeeCallerMessage {
+  factory ReceivedCoffeeCallerMessage(
+    CoffeeCallerMessageType type,
+    String name,
+    DateTime broadcastAt,
+  ) = _ReceivedCoffeeCallerMessage;
+
+  factory ReceivedCoffeeCallerMessage.fromJson(Map<String, dynamic> json) =>
+      _$ReceivedCoffeeCallerMessageFromJson(json);
+}
