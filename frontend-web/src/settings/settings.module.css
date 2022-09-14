@@ -1,5 +1,10 @@
 .confirm {
-    color: var(--confirm-green);
-    position: relative;
-    top: 3px;
+  color: var(--confirm-green);
+  width: 0px;
+  display: inline-block;
+  overflow: visible;
+}
+
+.settings-label .label-text {
+  margin-right: 5px;
 }

@@ -6,6 +6,8 @@
   --background-lightest: #778197;
 
   --confirm-green: #228f22;
+
+  font-size: calc(10px + 2vmin);
 }
 
 body {
@@ -18,8 +20,6 @@ body {
 
   background-color: var(--background);
   color: white;
-  
-  font-size: calc(10px + 2vmin);
 }
 
 body, #root {
@@ -43,4 +43,8 @@ a:hover {
 
 a.active {
   font-weight: bold;
+}
+
+input {
+  font-size: 1rem;
 }

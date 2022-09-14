@@ -1,30 +1,39 @@
-import { Component, createEffect, createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, Show } from 'solid-js';
 import * as storage from './persistence';
 
 import style from './settings.module.css';
 
 export const Settings: Component = () => {
-  const [username, setUsername] = createSignal(storage.getUsername());
-  const [usernameStored, setUsernameStored] = createSignal(false);
+  return <>Settings: <br />
+    <DelayedStoringInput label="Username: " storeValue={storage.storeUsername} getValue={storage.getUsername}/>
+  </>
+}
+
+type DelayedStoringInputProps = {label: string, storeValue: (value: string) => void, getValue: () => string, storeDelayInMs?: number};
+const DelayedStoringInput: Component<DelayedStoringInputProps> = (props) => {
+  const [value, setValue] = createSignal(props.getValue());
+  const [valueStored, setValueStored] = createSignal(false);
 
   let storageTimeout: number | undefined;
   function handleInput(event: InputEvent) {
-    setUsernameStored(false);
+    setValueStored(false);
 
     clearTimeout(storageTimeout);
     storageTimeout = window.setTimeout(
       () => {
-        storage.storeUsername((event.target as HTMLInputElement).value);
-        setUsername(storage.getUsername());
-        setUsernameStored(true);
+        props.storeValue((event.target as HTMLInputElement).value);
+        setValue(props.getValue());
+        setValueStored(true);
       },
-      800
+      props.storeDelayInMs ?? 800
     );
   }
 
-  return <label>
-    Username:
-    <input type="text" name="username" value={username()} onInput={handleInput} />
-    <Show when={usernameStored()}><span class={style.confirm}>✓</span></Show> 
+  return <label class={style['settings-label']}>
+    <span class={style['label-text']}>{props.label}</span>
+    <input type="text" name="value" value={value()} onInput={handleInput} />
+    <Show when={valueStored()}>
+      <span class={style.confirm}>✓</span>
+    </Show> 
   </label>;
 }
