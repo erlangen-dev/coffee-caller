@@ -1,16 +1,25 @@
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+.logo {
+  max-height: 25vh;
+  max-width: 95%;
 
-  to {
-    transform: rotate(360deg);
-  }
+  margin-top: 30px;
+  margin-bottom: 10px;
+
+  filter: drop-shadow(10px 5px 6px rgb(0 0 0 / 0.4));
+
+  animation: float 6s ease-in-out infinite;
 }
 
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
 
-.logo {
-  animation: logo-spin infinite 20s linear;
-  font-size: 7em;
-  pointer-events: none;
+  50% {
+    transform: translatey(-20px);
+  }
+
+  100% {
+    transform: translatey(0px);
+  }
 }
