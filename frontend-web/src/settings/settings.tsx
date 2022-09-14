@@ -7,7 +7,8 @@ export const Settings: Component = () => (
   <DelayedStoringInput
     label="Name"
     storeValue={storage.storeUsername}
-    getValue={storage.getUsername} />
+    getValue={storage.getUsername}
+  />
 );
 
 type DelayedStoringInputProps = {
@@ -27,7 +28,9 @@ const DelayedStoringInput: Component<DelayedStoringInputProps> = (props) => {
     clearTimeout(storageTimeout);
     storageTimeout = window.setTimeout(
       () => {
-        props.storeValue((event.target as HTMLInputElement).value);
+        const value = (event.target as HTMLInputElement).value.trim();
+        if (value === '') { return; }
+        props.storeValue(value);
         setValue(props.getValue());
         setValueStored(true);
       },
@@ -35,9 +38,9 @@ const DelayedStoringInput: Component<DelayedStoringInputProps> = (props) => {
     );
   }
 
-  return <label class={style['settings-label']}>
-    <span class={style['label-text']}>{props.label}</span>
-    <input type="text" name="value" value={value()} onInput={handleInput} />
+  return <label>
+    <span>{props.label}</span>
+    <input class={style.input} type="text" name="value" value={value()} onInput={handleInput} />
     <Show when={valueStored()}>
       <span class={style.confirm}>✓</span>
     </Show>
