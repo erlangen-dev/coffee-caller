@@ -1,5 +1,5 @@
 import { Component, createSignal, Show } from 'solid-js';
-import * as storage from './persistence';
+import * as storage from '../shared/persistence';
 
 import style from './settings.module.css';
 
