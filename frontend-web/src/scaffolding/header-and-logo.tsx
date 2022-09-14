@@ -6,7 +6,7 @@ import headerStyles from './header.module.css';
 
 export const Header: ParentComponent = (props) =>
   <header class={headerStyles.header}>
-    <h1>CoffeeCaller</h1>
+    <h1>Coffee Caller</h1>
     <nav>
       {props.children}
     </nav>
