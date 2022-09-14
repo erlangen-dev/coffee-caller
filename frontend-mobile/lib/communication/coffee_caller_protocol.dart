@@ -5,7 +5,7 @@ import 'package:coffee_caller/communication/models/coffee_caller_message.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 
 class CoffeeCallerProtocol {
-  Stream<CoffeeCallerMessage> get messages =>
+  Stream<ReceivedCoffeeCallerMessage> get messages =>
       _socketClient.coffeeMessageStream.map(_decodeRawMessage);
 
   CoffeeCallerProtocol({required SocketClient socketClient})
@@ -30,7 +30,7 @@ class CoffeeCallerProtocol {
     _socketClient.sendMessage(jsonEncode(message));
   }
 
-  CoffeeCallerMessage _decodeRawMessage(String rawMessage) {
-    return CoffeeCallerMessage.fromJson(jsonDecode(rawMessage));
+  ReceivedCoffeeCallerMessage _decodeRawMessage(String rawMessage) {
+    return ReceivedCoffeeCallerMessage.fromJson(jsonDecode(rawMessage));
   }
 }
