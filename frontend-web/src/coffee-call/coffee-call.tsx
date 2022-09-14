@@ -3,6 +3,7 @@ import { Component, For } from 'solid-js';
 import styles from './coffee-call.module.css';
 import { SocketClient } from './socket-client';
 import { Protocol } from './protocol';
+import { getUsername } from '../shared/persistence';
 
 export const CoffeeCall: Component = () => {
   const client = new SocketClient();
@@ -11,9 +12,9 @@ export const CoffeeCall: Component = () => {
   return (
     <>
       <div class={styles.buttonRow}>
-        <button onClick={() => protocol.join('Spiderpig')}>Join</button>
-        <button onClick={() => protocol.leave('Spiderpig')}>Leave</button>
-        <button onClick={() => protocol.start('Spiderpig')}>Start</button>
+        <button onClick={() => protocol.join(getUsername())}>Join</button>
+        <button onClick={() => protocol.leave(getUsername())}>Leave</button>
+        <button onClick={() => protocol.start(getUsername())}>Start</button>
       </div>
       <ul>
         <For each={protocol.messages()}>{(message) =>
