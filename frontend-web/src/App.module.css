@@ -9,4 +9,5 @@
 main {
   flex: 1;
   flex-basis: 100%;
+  align-self: stretch;
 }
