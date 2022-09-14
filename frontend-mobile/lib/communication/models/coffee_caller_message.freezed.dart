@@ -168,3 +168,183 @@ abstract class _CoffeeCallerMessage implements CoffeeCallerMessage {
   _$$_CoffeeCallerMessageCopyWith<_$_CoffeeCallerMessage> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+ReceivedCoffeeCallerMessage _$ReceivedCoffeeCallerMessageFromJson(
+    Map<String, dynamic> json) {
+  return _ReceivedCoffeeCallerMessage.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ReceivedCoffeeCallerMessage {
+  CoffeeCallerMessageType get type => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  DateTime get broadcastAt => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ReceivedCoffeeCallerMessageCopyWith<ReceivedCoffeeCallerMessage>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ReceivedCoffeeCallerMessageCopyWith<$Res> {
+  factory $ReceivedCoffeeCallerMessageCopyWith(
+          ReceivedCoffeeCallerMessage value,
+          $Res Function(ReceivedCoffeeCallerMessage) then) =
+      _$ReceivedCoffeeCallerMessageCopyWithImpl<$Res>;
+  $Res call({CoffeeCallerMessageType type, String name, DateTime broadcastAt});
+}
+
+/// @nodoc
+class _$ReceivedCoffeeCallerMessageCopyWithImpl<$Res>
+    implements $ReceivedCoffeeCallerMessageCopyWith<$Res> {
+  _$ReceivedCoffeeCallerMessageCopyWithImpl(this._value, this._then);
+
+  final ReceivedCoffeeCallerMessage _value;
+  // ignore: unused_field
+  final $Res Function(ReceivedCoffeeCallerMessage) _then;
+
+  @override
+  $Res call({
+    Object? type = freezed,
+    Object? name = freezed,
+    Object? broadcastAt = freezed,
+  }) {
+    return _then(_value.copyWith(
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CoffeeCallerMessageType,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      broadcastAt: broadcastAt == freezed
+          ? _value.broadcastAt
+          : broadcastAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_ReceivedCoffeeCallerMessageCopyWith<$Res>
+    implements $ReceivedCoffeeCallerMessageCopyWith<$Res> {
+  factory _$$_ReceivedCoffeeCallerMessageCopyWith(
+          _$_ReceivedCoffeeCallerMessage value,
+          $Res Function(_$_ReceivedCoffeeCallerMessage) then) =
+      __$$_ReceivedCoffeeCallerMessageCopyWithImpl<$Res>;
+  @override
+  $Res call({CoffeeCallerMessageType type, String name, DateTime broadcastAt});
+}
+
+/// @nodoc
+class __$$_ReceivedCoffeeCallerMessageCopyWithImpl<$Res>
+    extends _$ReceivedCoffeeCallerMessageCopyWithImpl<$Res>
+    implements _$$_ReceivedCoffeeCallerMessageCopyWith<$Res> {
+  __$$_ReceivedCoffeeCallerMessageCopyWithImpl(
+      _$_ReceivedCoffeeCallerMessage _value,
+      $Res Function(_$_ReceivedCoffeeCallerMessage) _then)
+      : super(_value, (v) => _then(v as _$_ReceivedCoffeeCallerMessage));
+
+  @override
+  _$_ReceivedCoffeeCallerMessage get _value =>
+      super._value as _$_ReceivedCoffeeCallerMessage;
+
+  @override
+  $Res call({
+    Object? type = freezed,
+    Object? name = freezed,
+    Object? broadcastAt = freezed,
+  }) {
+    return _then(_$_ReceivedCoffeeCallerMessage(
+      type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CoffeeCallerMessageType,
+      name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      broadcastAt == freezed
+          ? _value.broadcastAt
+          : broadcastAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ReceivedCoffeeCallerMessage implements _ReceivedCoffeeCallerMessage {
+  _$_ReceivedCoffeeCallerMessage(this.type, this.name, this.broadcastAt);
+
+  factory _$_ReceivedCoffeeCallerMessage.fromJson(Map<String, dynamic> json) =>
+      _$$_ReceivedCoffeeCallerMessageFromJson(json);
+
+  @override
+  final CoffeeCallerMessageType type;
+  @override
+  final String name;
+  @override
+  final DateTime broadcastAt;
+
+  @override
+  String toString() {
+    return 'ReceivedCoffeeCallerMessage(type: $type, name: $name, broadcastAt: $broadcastAt)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ReceivedCoffeeCallerMessage &&
+            const DeepCollectionEquality().equals(other.type, type) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality()
+                .equals(other.broadcastAt, broadcastAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(type),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(broadcastAt));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ReceivedCoffeeCallerMessageCopyWith<_$_ReceivedCoffeeCallerMessage>
+      get copyWith => __$$_ReceivedCoffeeCallerMessageCopyWithImpl<
+          _$_ReceivedCoffeeCallerMessage>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ReceivedCoffeeCallerMessageToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ReceivedCoffeeCallerMessage
+    implements ReceivedCoffeeCallerMessage {
+  factory _ReceivedCoffeeCallerMessage(
+      final CoffeeCallerMessageType type,
+      final String name,
+      final DateTime broadcastAt) = _$_ReceivedCoffeeCallerMessage;
+
+  factory _ReceivedCoffeeCallerMessage.fromJson(Map<String, dynamic> json) =
+      _$_ReceivedCoffeeCallerMessage.fromJson;
+
+  @override
+  CoffeeCallerMessageType get type;
+  @override
+  String get name;
+  @override
+  DateTime get broadcastAt;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ReceivedCoffeeCallerMessageCopyWith<_$_ReceivedCoffeeCallerMessage>
+      get copyWith => throw _privateConstructorUsedError;
+}

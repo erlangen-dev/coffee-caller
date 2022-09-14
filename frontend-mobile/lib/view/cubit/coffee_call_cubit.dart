@@ -36,9 +36,15 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
     });
 
     protocol.messages.listen((message) {
+      final localDate = message.broadcastAt.toLocal();
+      final hour = localDate.hour.toString().padLeft(2, '0');
+      final minute = localDate.minute.toString().padLeft(2, '0');
+      final second = localDate.second.toString().padLeft(2, '0');
+      final time = '$hour:$minute:$second';
+
       emit(state.copyWith(messages: [
         ...state.messages,
-        '${message.name} ${message.type.name}s a coffee call',
+        '${message.name} ${message.type.name}s a coffee call @$time',
       ]));
     });
   }

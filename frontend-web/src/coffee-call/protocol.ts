@@ -7,12 +7,15 @@ type MessageType = typeof messageTypes[number];
 export interface CallMessage {
   type: MessageType;
   name: string;
+
+}export interface ReceivedCallMessage extends CallMessage {
+  broadcastAt: Date;
 }
 
 export class Protocol {
   constructor(private socket: SocketClient) { }
 
-  public get messages(): Observable<CallMessage> {
+  public get messages(): Observable<ReceivedCallMessage> {
     return this.socket.messages.pipe(
       map(this.parseRawMessage),
       catchError((err, source) => {
@@ -38,7 +41,7 @@ export class Protocol {
     this.socket.send(JSON.stringify({ name, type }));
   }
 
-  private parseRawMessage(rawMessage: string): CallMessage {
+  private parseRawMessage(rawMessage: string): ReceivedCallMessage {
     const parsedMessage = JSON.parse(rawMessage);
 
     if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {

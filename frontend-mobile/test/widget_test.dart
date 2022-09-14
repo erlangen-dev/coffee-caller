@@ -36,9 +36,16 @@ void main() {
 
     expect(find.textContaining('Hello World'), findsNothing);
 
-    socket.messageController.add('{"type": "join", "name": "Hello World"}');
+    socket.messageController.add('''{
+      "type": "join",
+      "name": "Hello World",
+      "broadcastAt": "2022-09-15T07:28:45.119Z"
+    }''');
     await tester.pump();
 
-    expect(find.text('Hello World joins a coffee call'), findsOneWidget);
+    expect(
+      find.textContaining('Hello World joins a coffee call'),
+      findsOneWidget,
+    );
   });
 }
