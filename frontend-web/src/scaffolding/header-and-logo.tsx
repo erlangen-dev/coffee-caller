@@ -1,6 +1,6 @@
 import { Component, ParentComponent } from "solid-js";
 
-
+import logo from './coffee-cup.svg';
 import logoStyles from './logo.module.css';
 import headerStyles from './header.module.css';
 
@@ -13,4 +13,4 @@ export const Header: ParentComponent = (props) =>
   </header>;
 
 export const Logo: Component = () =>
-  <span class={logoStyles.logo}>☕</span>
+  <img src={logo} class={logoStyles.logo} alt="Coffee Cup" />;
