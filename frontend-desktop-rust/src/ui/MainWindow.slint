@@ -1,0 +1,39 @@
+import { SpinBox, Button, CheckBox, Slider, LineEdit, ScrollView, ListView,
+    HorizontalBox, VerticalBox, GridBox, StandardButton } from "std-widgets.slint";
+
+export struct HistoryItem := {
+    user: string,
+    text: string,
+}
+
+export MainWindow := Window {
+    title: "Coffee Caller (Rust)";
+    preferred-width: 400px;
+    preferred-height: 600px;
+    callback call <=> btn.clicked;
+
+    callback add_entry(string, string);
+
+    property <[HistoryItem]> history-model: [
+    ];
+
+    vbox := VerticalBox {
+        HorizontalBox {
+            btn := Button {
+                text: "Call!";
+                enabled: true;
+            }
+        }
+
+        list_view := ListView {
+            for entry in history-model:  HorizontalLayout {
+                HorizontalBox { 
+                    Text {
+                        text: entry.user + ": " + entry.text;
+                        color: green;
+                    }
+                 }
+            }
+        }
+    }
+}
