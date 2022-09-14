@@ -44,6 +44,7 @@ export class Protocol {
 
   private parseRawMessage(rawMessage: string): ReceivedCallMessage {
     const parsedMessage = JSON.parse(rawMessage);
+    parsedMessage.broadcastAt = new Date(parsedMessage.broadcastAt);
 
     if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {
       throw Error('Invalid message');

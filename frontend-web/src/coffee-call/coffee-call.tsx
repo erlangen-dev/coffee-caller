@@ -1,10 +1,11 @@
-import { Component, createMemo, For, from, Show } from 'solid-js';
+import { Accessor, Component, createEffect, createMemo, For, from, Show } from 'solid-js';
 
 import styles from './coffee-call.module.css';
 import { SocketClient } from './socket-client';
-import { Protocol, ReceivedCallMessage } from './protocol';
+import { Protocol } from './protocol';
 import { getUsername } from '../shared/persistence';
 import { Link } from '@solidjs/router';
+import { aggregatedCoffeeCall, CoffeeCallState, CoffeeCall as CoffeeCallObj } from './call-aggregation';
 
 export const CoffeeCall: Component = () => {
   const client = new SocketClient();
@@ -12,11 +13,8 @@ export const CoffeeCall: Component = () => {
 
   const username = getUsername();
 
-  const messageSignal = from(protocol.messages);
-  const messages = createMemo((existingMessages: ReceivedCallMessage[]) => {
-    const message = messageSignal();
-    return message === undefined ? existingMessages : [...existingMessages, message]
-  }, []);
+  const coffeeCall = from(aggregatedCoffeeCall(protocol.messages));
+  const participantsAsList = () => Array.from(coffeeCall()?.participants.values() ?? []).join(',');
 
   return (
     <>
@@ -35,11 +33,20 @@ export const CoffeeCall: Component = () => {
           <button onClick={() => protocol.start(username)}>Start</button>
         </Show>
       </div>
+
+      <Show when={coffeeCall()?.state === CoffeeCallState.announced}>Coffee call announced!</Show>
+      <Show when={coffeeCall()?.state === CoffeeCallState.inProgress}>Coffee call in progress!</Show>
+      <Show when={coffeeCall()?.state === CoffeeCallState.canceled}>Coffee call canceled!</Show>
+
+      <Show when={coffeeCall() && coffeeCall()?.state !== CoffeeCallState.inactive && coffeeCall()?.state !== CoffeeCallState.canceled}>
+        <br />
+        On board: {participantsAsList()}
+      </Show>
       <ul>
-        <For each={messages()}>{(message) =>
-          <li>{message.name} {message.type}s a coffee call @{message.broadcastAt.toLocaleString()} </li>
+        <For each={coffeeCall()?.messages}>{(message) =>
+          <li>{message.name} {message.type}s a coffee call @{message.broadcastAt.toLocaleString()}</li>
         }</For>
-      </ul>
+      </ul >
     </>
   );
 };
