@@ -19,7 +19,7 @@ export const CoffeeCall: Component = () => {
           when={username.trim() !== ''}
           fallback={
             <>
-              To participate in calls, set your name first.<br/>
+              To participate in calls, set your name first.<br />
               <em>→ <Link href="/settings">Settings</Link></em>
             </>
           }
