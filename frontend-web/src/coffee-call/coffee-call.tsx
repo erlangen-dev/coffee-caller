@@ -1,4 +1,4 @@
-import { Accessor, Component, createEffect, createMemo, For, from, Show } from 'solid-js';
+import { Accessor, Component, createMemo, For, from, Show } from 'solid-js';
 
 import styles from './coffee-call.module.css';
 import { SocketClient } from './socket-client';
@@ -13,8 +13,8 @@ export const CoffeeCall: Component = () => {
 
   const username = getUsername();
 
-  const coffeeCall = from(aggregatedCoffeeCall(protocol.messages));
-  const participantsAsList = () => Array.from(coffeeCall()?.participants.values() ?? []).join(',');
+  const coffeeCall = fromWithDefault(aggregatedCoffeeCall(protocol.messages), new CoffeeCallObj([]));
+  const participantsAsList = () => Array.from(coffeeCall().participants.values()).join(',');
 
   return (
     <>
@@ -34,18 +34,23 @@ export const CoffeeCall: Component = () => {
         </Show>
       </div>
 
-      <Show when={coffeeCall()?.state === CoffeeCallState.announced}>Coffee call announced!</Show>
-      <Show when={coffeeCall()?.state === CoffeeCallState.inProgress}>Coffee call in progress!</Show>
-      <Show when={coffeeCall()?.state === CoffeeCallState.canceled}>Coffee call canceled!</Show>
+      <Show when={coffeeCall().state === CoffeeCallState.announced}>Coffee call announced!</Show>
+      <Show when={coffeeCall().state === CoffeeCallState.inProgress}>Coffee call in progress!</Show>
+      <Show when={coffeeCall().state === CoffeeCallState.canceled}>Coffee call canceled!</Show>
 
-      <Show when={coffeeCall() && coffeeCall()?.state !== CoffeeCallState.inactive && coffeeCall()?.state !== CoffeeCallState.canceled}>
+      <Show when={coffeeCall().state !== CoffeeCallState.inactive && coffeeCall().state !== CoffeeCallState.canceled}>
         On board: {participantsAsList()}
       </Show>
       <ul>
-        <For each={coffeeCall()?.messages}>{(message) =>
+        <For each={coffeeCall().messages}>{(message) =>
           <li>{message.name} {message.type}s a coffee call @{message.broadcastAt.toLocaleString()}</li>
         }</For>
       </ul >
     </>
   );
 };
+
+function fromWithDefault<T>(source: Parameters<typeof from<T>>[0], initial: T): Accessor<T> {
+  const signal = from(source);
+  return createMemo(() => signal() ?? initial);
+}
