@@ -1,4 +1,4 @@
-import { Accessor, createMemo } from "solid-js";
+import { catchError, map, Observable } from "rxjs";
 import { SocketClient } from "./socket-client";
 
 const messageTypes = ['join', 'leave', 'start'] as const;
@@ -9,18 +9,16 @@ export interface CallMessage {
   name: string;
 }
 
-type InvalidMessage = 'InvalidMessage';
-
 export class Protocol {
   constructor(private socket: SocketClient) { }
 
-  public get messages(): Accessor<CallMessage[]> {
-    return createMemo(
-      () =>
-        this.socket
-          .messages()
-          .map(this.parseRawMessage)
-          .filter(isValidMessage)
+  public get messages(): Observable<CallMessage> {
+    return this.socket.messages.pipe(
+      map(this.parseRawMessage),
+      catchError((err, source) => {
+        console.warn('Skipping a message. Could not parse message:', err);
+        return source;
+      })
     );
   }
 
@@ -40,22 +38,13 @@ export class Protocol {
     this.socket.send(JSON.stringify({ name, type }));
   }
 
-  private parseRawMessage(rawMessage: string): CallMessage | InvalidMessage {
-    try {
-      const parsedMessage = JSON.parse(rawMessage);
+  private parseRawMessage(rawMessage: string): CallMessage {
+    const parsedMessage = JSON.parse(rawMessage);
 
-      if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {
-        console.warn('Invalid message received:', rawMessage);
-        return 'InvalidMessage';
-      }
-
-      return parsedMessage;
-    } catch (e) {
-      console.warn('Could not parse message', e);
-      return 'InvalidMessage';
+    if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {
+      throw Error('Invalid message');
     }
+
+    return parsedMessage;
   }
 }
-
-const isValidMessage = (message: CallMessage | InvalidMessage)
-  : message is CallMessage => message !== 'InvalidMessage';
