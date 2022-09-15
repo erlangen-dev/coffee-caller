@@ -6,7 +6,7 @@ const event = 'coffee';
 export class SocketClient {
     private socket: Socket | undefined;
 
-    constructor(private signal = createSignal<string[]>([])){
+    constructor(private signal = createSignal<string[]>([])) {
         this.connect();
     }
 
@@ -35,14 +35,14 @@ export class SocketClient {
         });
     }
 
-    public send(message: string)  {
+    public send(message: string) {
         assertConnected(this.socket);
         this.socket.emit(event, message);
     }
 }
 
-function assertConnected(socket: Socket | undefined) : asserts socket is Socket {
-    if(socket === undefined) {
+function assertConnected(socket: Socket | undefined): asserts socket is Socket {
+    if (socket === undefined) {
         throw Error('Not connected');
     }
 }
