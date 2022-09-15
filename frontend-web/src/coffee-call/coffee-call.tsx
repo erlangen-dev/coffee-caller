@@ -1,8 +1,8 @@
-import { Component, For, Show } from 'solid-js';
+import { Component, createMemo, For, from, Show } from 'solid-js';
 
 import styles from './coffee-call.module.css';
 import { SocketClient } from './socket-client';
-import { Protocol } from './protocol';
+import { CallMessage, Protocol } from './protocol';
 import { getUsername } from '../shared/persistence';
 import { Link } from '@solidjs/router';
 
@@ -11,6 +11,12 @@ export const CoffeeCall: Component = () => {
   const protocol = new Protocol(client);
 
   const username = getUsername();
+
+  const newestMessage = from(protocol.messages);
+  const allMessages = createMemo((oldValue: CallMessage[]) => {
+    const actualNewMessage = newestMessage();
+    return actualNewMessage === undefined ? [...oldValue] : [...oldValue, actualNewMessage]
+  }, []);
 
   return (
     <>
@@ -30,7 +36,7 @@ export const CoffeeCall: Component = () => {
         </Show>
       </div>
       <ul>
-        <For each={protocol.messages()}>{(message) =>
+        <For each={allMessages()}>{(message) =>
           <li>{message.name} {message.type}s a coffee call</li>
         }</For>
       </ul>

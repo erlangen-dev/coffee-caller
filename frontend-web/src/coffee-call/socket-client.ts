@@ -1,21 +1,17 @@
+import { Observable, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { Accessor, createSignal, Setter } from 'solid-js';
 
 const event = 'coffee';
 
 export class SocketClient {
     private socket: Socket | undefined;
 
-    constructor(private signal = createSignal<string[]>([])) {
+    constructor(private messageSubject = new Subject<string>()) {
         this.connect();
     }
 
-    public get messages(): Accessor<string[]> {
-        return this.signal[0];
-    }
-
-    private get setMessages(): Setter<string[]> {
-        return this.signal[1];
+    public get messages(): Observable<string> {
+        return this.messageSubject.asObservable();
     }
 
     private connect() {
@@ -31,7 +27,7 @@ export class SocketClient {
 
         this.socket.on(event, (data) => {
             console.log('Coffee message received:', data);
-            this.setMessages([...this.messages(), data]);
+            this.messageSubject.next(data);
         });
     }
 
