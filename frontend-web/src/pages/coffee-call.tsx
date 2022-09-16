@@ -1,12 +1,10 @@
-import { Accessor, Component, createMemo, For, from, Show } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 
 import styles from './coffee-call.module.css';
-import { SocketClient } from './socket-client';
-import { Protocol } from './protocol';
 import { getUsername } from '@features/settings';
 import { Link } from '@solidjs/router';
-import { aggregatedCoffeeCall, CoffeeCallState, CoffeeCall as CoffeeCallObj } from './call-aggregation';
 import { fromWithDefault } from '../shared/reactivity';
+import { aggregatedCoffeeCall, Protocol, SocketClient, CoffeeCall as CoffeeCallObj, CoffeeCallState } from '@features/call-for-coffee';
 
 export const CoffeeCall: Component = () => {
   const client = new SocketClient();
