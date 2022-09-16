@@ -1,6 +1,6 @@
 import { Component, ParentComponent } from "solid-js";
 
-import logo from './coffee-cup.svg';
+import logo from '@assets/coffee-cup.svg';
 import logoStyles from './logo.module.css';
 import headerStyles from './header.module.css';
 
