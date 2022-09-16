@@ -2,7 +2,7 @@ import { DelayedStoringInput, getUsername, storeUsername } from '@features/setti
 import { Component } from 'solid-js';
 
 
-export const Settings: Component = () => (
+export const SettingsPage: Component = () => (
   <DelayedStoringInput
     label="Name"
     storeValue={storeUsername}
