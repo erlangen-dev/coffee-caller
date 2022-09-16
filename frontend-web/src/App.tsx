@@ -5,7 +5,7 @@ import styles from './App.module.css';
 
 import { CoffeeCall } from './coffee-call/coffee-call';
 import { Header, Logo } from '@features/ui';
-import { Settings } from './settings/settings';
+import { Settings } from './pages/settings';
 
 export const App: Component = () => (
   <div class={styles.App}>
