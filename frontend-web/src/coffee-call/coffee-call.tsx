@@ -3,7 +3,7 @@ import { Accessor, Component, createMemo, For, from, Show } from 'solid-js';
 import styles from './coffee-call.module.css';
 import { SocketClient } from './socket-client';
 import { Protocol } from './protocol';
-import { getUsername } from '../shared/persistence';
+import { getUsername } from '@features/settings';
 import { Link } from '@solidjs/router';
 import { aggregatedCoffeeCall, CoffeeCallState, CoffeeCall as CoffeeCallObj } from './call-aggregation';
 import { fromWithDefault } from '../shared/reactivity';

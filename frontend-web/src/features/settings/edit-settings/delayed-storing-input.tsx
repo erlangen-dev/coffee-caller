@@ -1,15 +1,6 @@
-import { Component, createSignal, Show } from 'solid-js';
-import * as storage from '../shared/persistence';
+import { Component, createSignal, Show } from "solid-js";
 
-import style from './settings.module.css';
-
-export const Settings: Component = () => (
-  <DelayedStoringInput
-    label="Name"
-    storeValue={storage.storeUsername}
-    getValue={storage.getUsername}
-  />
-);
+import style from './delayed-storing-input.module.css';
 
 type DelayedStoringInputProps = {
   label: string,
@@ -17,7 +8,7 @@ type DelayedStoringInputProps = {
   getValue: () => string, storeDelayInMs?: number
 };
 
-const DelayedStoringInput: Component<DelayedStoringInputProps> = (props) => {
+export const DelayedStoringInput: Component<DelayedStoringInputProps> = (props) => {
   const [value, setValue] = createSignal(props.getValue());
   const [valueStored, setValueStored] = createSignal(false);
 
