@@ -3,9 +3,9 @@ import { Component } from 'solid-js';
 
 import styles from './App.module.css';
 
-import { CoffeeCall } from './pages/coffee-call';
+import { CoffeeCallPage } from './pages/coffee-call';
 import { Header, Logo } from '@features/ui';
-import { Settings } from './pages/settings';
+import { SettingsPage } from './pages/settings';
 
 export const App: Component = () => (
   <div class={styles.App}>
@@ -16,8 +16,8 @@ export const App: Component = () => (
     <Logo />
     <main>
       <Routes>
-        <Route path="/" component={CoffeeCall} />
-        <Route path="/settings" component={Settings} />
+        <Route path="/" component={CoffeeCallPage} />
+        <Route path="/settings" component={SettingsPage} />
       </Routes>
     </main>
   </div>
