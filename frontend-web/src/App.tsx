@@ -3,7 +3,7 @@ import { Component } from 'solid-js';
 
 import styles from './App.module.css';
 
-import { CoffeeCall } from './coffee-call/coffee-call';
+import { CoffeeCall } from './pages/coffee-call';
 import { Header, Logo } from '@features/ui';
 import { Settings } from './pages/settings';
 
