@@ -1,7 +1,7 @@
 import { delay, map, merge, Observable, of, scan, switchMap, tap } from "rxjs";
 import { ReceivedCallMessage } from "./protocol";
 
-export const enum CoffeeCallState {
+export const enum CoffeeCallStatus {
   inactive,
   announced,
   inProgress,
@@ -9,7 +9,7 @@ export const enum CoffeeCallState {
 };
 
 export class CoffeeCall {
-  state: CoffeeCallState = CoffeeCallState.inactive;
+  status: CoffeeCallStatus = CoffeeCallStatus.inactive;
   participants: Set<string> = new Set();
 
   constructor(public messages: ReceivedCallMessage[]) {
@@ -20,12 +20,12 @@ export class CoffeeCall {
     for (const message of messages) {
       switch (message.type) {
         case 'start':
-          this.state = CoffeeCallState.inProgress;
+          this.status = CoffeeCallStatus.inProgress;
           this.participants.add(message.name);
           break;
         case 'join':
-          if (this.state !== CoffeeCallState.inProgress) {
-            this.state = CoffeeCallState.announced;
+          if (this.status !== CoffeeCallStatus.inProgress) {
+            this.status = CoffeeCallStatus.announced;
           }
           this.participants.add(message.name);
           break;
@@ -38,7 +38,7 @@ export class CoffeeCall {
     }
 
     if (this.participants.size === 0) {
-      this.state = CoffeeCallState.canceled;
+      this.status = CoffeeCallStatus.canceled;
     }
   }
 }

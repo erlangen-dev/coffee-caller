@@ -13,7 +13,6 @@ export const CoffeeCall: Component = () => {
   const username = getUsername();
 
   const coffeeCall = fromWithDefault(aggregatedCoffeeCall(protocol.messages), new CoffeeCallObj([]));
-  const participantsAsList = () => Array.from(coffeeCall().participants.values()).join(',');
 
   return (
     <>
@@ -33,19 +32,7 @@ export const CoffeeCall: Component = () => {
         </Show>
       </div>
 
-      <Show when={coffeeCall().state === CoffeeCallState.announced}>Coffee call announced!</Show>
-      <Show when={coffeeCall().state === CoffeeCallState.inProgress}>Coffee call in progress!</Show>
-      <Show when={coffeeCall().state === CoffeeCallState.canceled}>Coffee call canceled!</Show>
-
-      <Show when={coffeeCall().state !== CoffeeCallState.inactive && coffeeCall().state !== CoffeeCallState.canceled}>
-        <br />
-        On board: {participantsAsList()}
-      </Show>
-      <ul>
-        <For each={coffeeCall().messages}>{(message) =>
-          <li>{message.name} {message.type}s a coffee call @{message.broadcastAt.toLocaleString()}</li>
-        }</For>
-      </ul >
+      <CoffeeCallState coffeeCall={coffeeCall()} />
     </>
   );
 };
