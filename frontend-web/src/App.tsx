@@ -4,7 +4,7 @@ import { Component } from 'solid-js';
 import styles from './App.module.css';
 
 import { CoffeeCall } from './coffee-call/coffee-call';
-import { Header, Logo } from './scaffolding/header-and-logo';
+import { Header, Logo } from '@features/ui';
 import { Settings } from './settings/settings';
 
 export const App: Component = () => (
