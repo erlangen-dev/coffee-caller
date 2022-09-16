@@ -2,3 +2,4 @@ export { aggregatedCoffeeCall, CoffeeCallStatus, CoffeeCall } from './backend-co
 export { SocketClient } from './backend-communication/socket-client';
 export { Protocol } from './backend-communication/protocol';
 export { CoffeeCallState } from './coffee-call-state/coffee-call-state';
+export { ButtonRow } from './button-row/button-row';
