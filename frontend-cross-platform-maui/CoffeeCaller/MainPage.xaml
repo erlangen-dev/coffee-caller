@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CoffeeCaller.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="32"
+            Padding="0,32"
+            VerticalOptions="Start">
+
+            <Image
+                Source="coffee_cup.png"
+                SemanticProperties.Description="Cute coffee cup smiling at you"
+                HeightRequest="200"
+                HorizontalOptions="Center" Margin="0" />
+
+            <HorizontalStackLayout
+                Spacing="16"
+                HorizontalOptions="Center">
+                
+                <Button
+                    x:Name="JoinButton"
+                    Text="Join"
+                    SemanticProperties.Hint="Join a coffee call"
+                    Clicked="OnJoinClicked"
+                    HorizontalOptions="Center" />
+
+                <Button
+                    x:Name="LeaveButton"
+                    Text="Leave"
+                    SemanticProperties.Hint="Leave a coffee call"
+                    Clicked="OnLeaveClicked"
+                    HorizontalOptions="Center" />
+
+                <Button
+                    x:Name="StartButton"
+                    Text="Start"
+                    SemanticProperties.Hint="Start a coffee call"
+                    Clicked="OnStartClicked"
+                    HorizontalOptions="Center" />
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
