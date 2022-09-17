@@ -1,16 +1,10 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'dart:async';
 
 import 'package:coffee_caller/communication/socket_client.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:coffee_caller/main.dart';
+import 'package:coffee_caller/storage/settings_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeSocketClient extends Fake implements SocketClient {
   StreamController<String> messageController = StreamController();
@@ -29,12 +23,17 @@ class FakeSocketClient extends Fake implements SocketClient {
 }
 
 void main() {
+  final socket = FakeSocketClient();
+
+  setUpAll(() async {
+    Map<String, Object> values = <String, Object>{usernameKey: 'Johnny tester'};
+    SharedPreferences.setMockInitialValues(values);
+  });
+
   testWidgets('Receiving a message prints the message',
       (WidgetTester tester) async {
-    final socket = FakeSocketClient();
     await tester.pumpWidget(App(socketClient: socket));
-
-    expect(find.textContaining('Hello World'), findsNothing);
+    await tester.pump();
 
     socket.messageController.add('''{
       "type": "join",
@@ -45,6 +44,17 @@ void main() {
 
     expect(
       find.textContaining('Hello World joins a coffee call'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Should display hint if no username set', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(App(socketClient: socket));
+    await tester.pump();
+
+    expect(
+      find.textContaining('Please set a username to participate in calls!'),
       findsOneWidget,
     );
   });
