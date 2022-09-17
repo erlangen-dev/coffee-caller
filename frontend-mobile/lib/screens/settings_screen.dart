@@ -37,14 +37,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
         margin: const EdgeInsets.fromLTRB(4, 12, 4, 4),
         child: Column(
           children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Username',
+            Hero(
+              tag: 'coffee-cup',
+              child: Image.asset(
+                'assets/coffee_cup.png',
+                width: 50,
+                height: 50,
               ),
             ),
-            TextButton(onPressed: _save, child: const Text('Save'))
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Username',
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(),
+              onPressed: _save,
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
           ],
         ),
       ),
