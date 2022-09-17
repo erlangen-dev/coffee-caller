@@ -1,6 +1,11 @@
 import 'package:coffee_caller/storage/settings_storage.dart';
 import 'package:flutter/material.dart';
 
+Future<void> navigateToSettings(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
