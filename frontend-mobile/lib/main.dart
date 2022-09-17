@@ -1,6 +1,7 @@
 import 'package:coffee_caller/environment.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/screens/home_screen.dart';
+import 'package:coffee_caller/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Coffee Caller',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: appTheme,
       home: Provider.value(
         value: socketClient,
         child: const HomeScreen(),
