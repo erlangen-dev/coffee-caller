@@ -52,6 +52,10 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
     });
   }
 
+  void _onCoffeeCupClicked() {
+    context.read<CoffeeCallCubit>().next();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (userName == '') {
@@ -59,21 +63,22 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
     }
     return Column(
       children: [
-        Row(
-          children: [
-            TextButton(
-              onPressed: context.read<CoffeeCallCubit>().join,
-              child: const Text('Join'),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Hero(
+            tag: 'coffee-cup',
+            child: Material(
+              child: ElevatedButton(
+                onPressed: _onCoffeeCupClicked,
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(48),
+                ),
+                child: Image.asset('assets/coffee_cup.png',
+                    height: 200, width: 200),
+              ),
             ),
-            TextButton(
-              onPressed: context.read<CoffeeCallCubit>().leave,
-              child: const Text('Leave'),
-            ),
-            TextButton(
-              onPressed: context.read<CoffeeCallCubit>().start,
-              child: const Text('Start'),
-            ),
-          ],
+          ),
         ),
         BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
           builder: (context, state) {
@@ -87,7 +92,7 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
               shrinkWrap: true,
             );
           },
-        )
+        ),
       ],
     );
   }

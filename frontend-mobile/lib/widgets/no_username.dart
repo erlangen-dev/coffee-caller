@@ -13,8 +13,11 @@ class NoUsername extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Please set a username to participate in calls!',
-              style: TextStyle(fontSize: 32)),
+          const Text(
+            'Please set a username to participate in calls!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 32),
+          ),
           TextButton(
             onPressed: () async {
               await navigateToSettings(context);

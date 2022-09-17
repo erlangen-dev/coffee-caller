@@ -8,11 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeSocketClient extends Fake implements SocketClient {
   StreamController<String> messageController = StreamController();
-  StreamController<SocketClientConnectStatus> statusController =
-      StreamController();
+  StreamController<SocketConnectStatus> statusController = StreamController();
 
   @override
-  Stream<SocketClientConnectStatus> get connectStatusStream =>
+  Stream<SocketConnectStatus> get connectStatusStream =>
       statusController.stream;
 
   @override

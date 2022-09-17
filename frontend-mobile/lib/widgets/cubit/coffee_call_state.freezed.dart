@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CoffeeCallState {
   CoffeeCallStatus get status => throw _privateConstructorUsedError;
+  SocketConnectStatus get connectStatus => throw _privateConstructorUsedError;
   List<String> get messages => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,10 @@ abstract class $CoffeeCallStateCopyWith<$Res> {
   factory $CoffeeCallStateCopyWith(
           CoffeeCallState value, $Res Function(CoffeeCallState) then) =
       _$CoffeeCallStateCopyWithImpl<$Res>;
-  $Res call({CoffeeCallStatus status, List<String> messages});
+  $Res call(
+      {CoffeeCallStatus status,
+      SocketConnectStatus connectStatus,
+      List<String> messages});
 }
 
 /// @nodoc
@@ -44,6 +48,7 @@ class _$CoffeeCallStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? connectStatus = freezed,
     Object? messages = freezed,
   }) {
     return _then(_value.copyWith(
@@ -51,6 +56,10 @@ class _$CoffeeCallStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as CoffeeCallStatus,
+      connectStatus: connectStatus == freezed
+          ? _value.connectStatus
+          : connectStatus // ignore: cast_nullable_to_non_nullable
+              as SocketConnectStatus,
       messages: messages == freezed
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -66,7 +75,10 @@ abstract class _$$_CoffeeCallStateCopyWith<$Res>
           _$_CoffeeCallState value, $Res Function(_$_CoffeeCallState) then) =
       __$$_CoffeeCallStateCopyWithImpl<$Res>;
   @override
-  $Res call({CoffeeCallStatus status, List<String> messages});
+  $Res call(
+      {CoffeeCallStatus status,
+      SocketConnectStatus connectStatus,
+      List<String> messages});
 }
 
 /// @nodoc
@@ -83,6 +95,7 @@ class __$$_CoffeeCallStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? connectStatus = freezed,
     Object? messages = freezed,
   }) {
     return _then(_$_CoffeeCallState(
@@ -90,6 +103,10 @@ class __$$_CoffeeCallStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as CoffeeCallStatus,
+      connectStatus == freezed
+          ? _value.connectStatus
+          : connectStatus // ignore: cast_nullable_to_non_nullable
+              as SocketConnectStatus,
       messages == freezed
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -102,13 +119,17 @@ class __$$_CoffeeCallStateCopyWithImpl<$Res>
 
 class _$_CoffeeCallState implements _CoffeeCallState {
   const _$_CoffeeCallState(
-      [this.status = CoffeeCallStatus.initial,
+      [this.status = CoffeeCallStatus.unknown,
+      this.connectStatus = SocketConnectStatus.unknown,
       final List<String> messages = const []])
       : _messages = messages;
 
   @override
   @JsonKey()
   final CoffeeCallStatus status;
+  @override
+  @JsonKey()
+  final SocketConnectStatus connectStatus;
   final List<String> _messages;
   @override
   @JsonKey()
@@ -119,7 +140,7 @@ class _$_CoffeeCallState implements _CoffeeCallState {
 
   @override
   String toString() {
-    return 'CoffeeCallState(status: $status, messages: $messages)';
+    return 'CoffeeCallState(status: $status, connectStatus: $connectStatus, messages: $messages)';
   }
 
   @override
@@ -128,6 +149,8 @@ class _$_CoffeeCallState implements _CoffeeCallState {
         (other.runtimeType == runtimeType &&
             other is _$_CoffeeCallState &&
             const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality()
+                .equals(other.connectStatus, connectStatus) &&
             const DeepCollectionEquality().equals(other._messages, _messages));
   }
 
@@ -135,6 +158,7 @@ class _$_CoffeeCallState implements _CoffeeCallState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(connectStatus),
       const DeepCollectionEquality().hash(_messages));
 
   @JsonKey(ignore: true)
@@ -146,10 +170,13 @@ class _$_CoffeeCallState implements _CoffeeCallState {
 abstract class _CoffeeCallState implements CoffeeCallState {
   const factory _CoffeeCallState(
       [final CoffeeCallStatus status,
+      final SocketConnectStatus connectStatus,
       final List<String> messages]) = _$_CoffeeCallState;
 
   @override
   CoffeeCallStatus get status;
+  @override
+  SocketConnectStatus get connectStatus;
   @override
   List<String> get messages;
   @override
