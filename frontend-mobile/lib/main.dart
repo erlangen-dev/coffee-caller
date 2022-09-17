@@ -1,6 +1,6 @@
 import 'package:coffee_caller/environment.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
-import 'package:coffee_caller/view/coffee_call_screen.dart';
+import 'package:coffee_caller/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       ),
       home: Provider.value(
         value: socketClient,
-        child: const CoffeeCallScreen(),
+        child: const HomeScreen(),
       ),
     );
   }
