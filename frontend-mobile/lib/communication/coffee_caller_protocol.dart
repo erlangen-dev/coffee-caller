@@ -13,6 +13,10 @@ class CoffeeCallerProtocol {
 
   final SocketClient _socketClient;
 
+  void connect() {
+    _socketClient.init();
+  }
+
   void join(String username) {
     _send(CoffeeCallerMessageType.join, username);
   }
