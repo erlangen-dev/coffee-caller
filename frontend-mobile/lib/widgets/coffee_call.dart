@@ -1,6 +1,8 @@
 import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/storage/settings_storage.dart';
+import 'package:coffee_caller/widgets/coffee_cup_logo.dart';
+import 'package:coffee_caller/widgets/connect_status_icon.dart';
 import 'package:coffee_caller/widgets/no_username.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_cubit.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_state.dart';
@@ -16,13 +18,10 @@ class CoffeeCall extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CoffeeCallCubit(
-        socket: context.read<SocketClient>(),
         protocol: CoffeeCallerProtocol(
           socketClient: context.read<SocketClient>(),
         ),
-      )
-        ..init()
-        ..connect(),
+      )..init(),
       child: const CoffeeCallBody(),
     );
   }
@@ -61,39 +60,55 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
     if (userName == '') {
       return NoUsername(onUsernameSet: _setUsername);
     }
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Hero(
-            tag: 'coffee-cup',
-            child: Material(
-              child: ElevatedButton(
-                onPressed: _onCoffeeCupClicked,
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(48),
-                ),
-                child: Image.asset('assets/coffee_cup.png',
-                    height: 200, width: 200),
+    return BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child:
+                        ConnectStatusIcon(connectStatus: state.connectStatus),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CoffeeCupLogo(onClick: _onCoffeeCupClicked),
+                  ),
+                ],
               ),
-            ),
+              Card(
+                margin: const EdgeInsets.all(10),
+                elevation: 20,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    'CoffeeCall: ${state.status.name}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              ),
+              ListView.builder(
+                itemBuilder: (BuildContext context, index) {
+                  return Card(
+                    margin: const EdgeInsets.all(5),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(state.messages[index]),
+                    ),
+                  );
+                },
+                padding: const EdgeInsets.all(10),
+                itemCount: state.messages.length,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              ),
+            ],
           ),
-        ),
-        BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
-          builder: (context, state) {
-            return ListView.builder(
-              itemBuilder: (BuildContext context, index) {
-                return Text(state.messages[index]);
-              },
-              padding: const EdgeInsets.all(5),
-              itemCount: state.messages.length,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-            );
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }
