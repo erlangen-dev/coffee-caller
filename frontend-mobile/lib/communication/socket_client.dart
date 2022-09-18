@@ -5,10 +5,7 @@ import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 enum SocketConnectStatus { unknown, disconnected, connecting, connected, error }
 
 class SocketClient {
-  Stream<SocketConnectStatus> get connectStatusStream =>
-      _statusController.stream;
-
-  Stream<String> get coffeeMessageStream => _coffeeMessageController.stream;
+  Stream<String> get coffeeMessage => _coffeeMessageController.stream;
 
   SocketClient(String serverUrl)
       : _socket = socket_io.io(serverUrl, <String, dynamic>{
@@ -20,7 +17,7 @@ class SocketClient {
   final _statusController = StreamController<SocketConnectStatus>();
   final _coffeeMessageController = StreamController<String>();
 
-  void init() {
+  Stream<SocketConnectStatus> connect() {
     _statusController.sink.add(SocketConnectStatus.connecting);
     _socket.connect();
 
@@ -39,6 +36,7 @@ class SocketClient {
     );
 
     _socket.on('coffee', (data) => _coffeeMessageController.sink.add(data));
+    return _statusController.stream;
   }
 
   void sendMessage(String message) {
