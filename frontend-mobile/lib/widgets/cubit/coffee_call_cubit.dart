@@ -1,24 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/models/coffee_caller_message.dart';
-import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/storage/settings_storage.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_state.dart';
 
 class CoffeeCallCubit extends Cubit<CoffeeCallState> {
-  SocketClient socket;
   CoffeeCallerProtocol protocol;
 
   CoffeeCallCubit({
-    required this.socket,
     required this.protocol,
   }) : super(const CoffeeCallState());
 
   void init() {
-    socket.connectStatusStream.listen((status) {
-      emit(state.copyWith(connectStatus: status));
-    });
-
     protocol.messages.listen((message) {
       final localDate = message.broadcastAt.toLocal();
       final hour = localDate.hour.toString().padLeft(2, '0');
@@ -33,6 +26,10 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
         '${message.name} ${message.type.name}s a coffee call @$time',
       ]));
     });
+
+    protocol
+        .connect()
+        .listen((status) => emit(state.copyWith(connectStatus: status)));
   }
 
   void next() {
@@ -45,10 +42,6 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
       return;
     }
     _leave();
-  }
-
-  void connect() {
-    protocol.connect();
   }
 
   void _join() async {

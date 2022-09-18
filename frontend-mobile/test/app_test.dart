@@ -11,14 +11,10 @@ class FakeSocketClient extends Fake implements SocketClient {
   StreamController<SocketConnectStatus> statusController = StreamController();
 
   @override
-  Stream<SocketConnectStatus> get connectStatusStream =>
-      statusController.stream;
+  Stream<String> get coffeeMessage => messageController.stream;
 
   @override
-  Stream<String> get coffeeMessageStream => messageController.stream;
-
-  @override
-  void init() {}
+  Stream<SocketConnectStatus> connect() => statusController.stream;
 }
 
 void main() {

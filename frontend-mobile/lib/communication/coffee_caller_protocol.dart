@@ -6,16 +6,14 @@ import 'package:coffee_caller/communication/socket_client.dart';
 
 class CoffeeCallerProtocol {
   Stream<ReceivedCoffeeCallerMessage> get messages =>
-      _socketClient.coffeeMessageStream.map(_decodeRawMessage);
+      _socketClient.coffeeMessage.map(_decodeRawMessage);
 
   CoffeeCallerProtocol({required SocketClient socketClient})
       : _socketClient = socketClient;
 
   final SocketClient _socketClient;
 
-  void connect() {
-    _socketClient.init();
-  }
+  Stream<SocketConnectStatus> connect() => _socketClient.connect();
 
   void join(String username) {
     _send(CoffeeCallerMessageType.join, username);
