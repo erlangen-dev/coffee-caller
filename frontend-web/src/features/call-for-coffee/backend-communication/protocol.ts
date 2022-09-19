@@ -9,6 +9,10 @@ export interface CallMessage {
   name: string;
 }
 
+export interface RawCallMessage extends CallMessage {
+  broadcastAt: string;
+}
+
 export interface ReceivedCallMessage extends CallMessage {
   broadcastAt: Date;
 }
@@ -18,7 +22,7 @@ export class Protocol {
 
   public get messages(): Observable<ReceivedCallMessage> {
     return this.socket.messages.pipe(
-      map(this.parseRawMessage),
+      map(this.parseMessage),
       catchError((err, source) => {
         console.warn('Skipping a message. Could not parse message:', err);
         return source;
@@ -39,17 +43,17 @@ export class Protocol {
   }
 
   private sendEvent(name: string, type: MessageType) {
-    this.socket.send(JSON.stringify({ name, type }));
+    this.socket.send({ name, type });
   }
 
-  private parseRawMessage(rawMessage: string): ReceivedCallMessage {
-    const parsedMessage = JSON.parse(rawMessage);
-    parsedMessage.broadcastAt = new Date(parsedMessage.broadcastAt);
-
-    if (!messageTypes.includes(parsedMessage.type) || typeof parsedMessage.name !== 'string') {
+  private parseMessage(message: RawCallMessage): ReceivedCallMessage {
+    if (!messageTypes.includes(message.type) || typeof message.name !== 'string') {
       throw Error('Invalid message');
     }
 
-    return parsedMessage;
+    return {
+      ...message,
+      broadcastAt: new Date(message.broadcastAt)
+    };
   }
 }

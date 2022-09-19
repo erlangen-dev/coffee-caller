@@ -14,11 +14,15 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
     console.log(`Got new connection: ${socket.id}`);
-    socket.on("coffee", (data) => {
-        io.sockets.emit("coffee", JSON.stringify({
-            ...JSON.parse(data),
+
+    socket.on("coffee", (messageIn) => {
+        console.log('← receivced msg:', messageIn);
+        const messageOut = {
+            ...messageIn,
             broadcastAt: new Date().toISOString()
-        }));
+        };
+        console.log('→ broadcast msg:', messageOut);
+        io.sockets.emit("coffee", messageOut);
     });
 });
 
