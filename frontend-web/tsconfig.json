@@ -12,8 +12,8 @@
     "noEmit": true,
     "isolatedModules": true,
     "paths": {
-      "@assets/*": ["src/assets/*"],
-      "@features/*": ["src/features/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@features/*": ["./src/features/*"],
     }
   }
 }
