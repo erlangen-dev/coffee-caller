@@ -4,5 +4,15 @@ services:
         build:
             context: backend
             dockerfile: Dockerfile
+        environment:
+            - PORT=4200
+            - CORS_ALLOWED_ORIGIN=${FQDN:-http://localhost:4201}
         ports:
             - ${BACKEND_PORT:-4200}:4200
+
+    frontend:
+        build:
+            context: frontend-web
+            dockerfile: Dockerfile
+        ports:
+            - ${FRONTEND_PORT:-4201}:80
