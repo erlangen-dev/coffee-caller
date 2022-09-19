@@ -1,16 +1,17 @@
 import { Observable, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { RawCallMessage } from './protocol';
 
 const event = 'coffee';
 
 export class SocketClient {
     private socket: Socket | undefined;
 
-    constructor(private messageSubject = new Subject<string>()) {
+    constructor(private messageSubject = new Subject<RawCallMessage>()) {
         this.connect();
     }
 
-    public get messages(): Observable<string> {
+    public get messages(): Observable<RawCallMessage> {
         return this.messageSubject.asObservable();
     }
 
@@ -31,9 +32,9 @@ export class SocketClient {
         });
     }
 
-    public send(message: string) {
+    public send(obj: object) {
         assertConnected(this.socket);
-        this.socket.emit(event, message);
+        this.socket.emit(event, obj);
     }
 }
 
