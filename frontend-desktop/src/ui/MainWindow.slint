@@ -10,7 +10,9 @@ export MainWindow := Window {
     title: "Coffee Caller (Rust)";
     preferred-width: 400px;
     preferred-height: 600px;
-    callback call <=> btn.clicked;
+    callback call <=> call_btn.clicked;
+    callback leave <=> leave_btn.clicked;
+    callback go <=> start_btn.clicked;
 
     callback add_entry(string, string);
 
@@ -19,8 +21,16 @@ export MainWindow := Window {
 
     vbox := VerticalBox {
         HorizontalBox {
-            btn := Button {
+            call_btn := Button {
                 text: "Call!";
+                enabled: true;
+            }
+            leave_btn := Button {
+                text: "Leave";
+                enabled: true;
+            }
+            start_btn := Button {
+                text: "Let's go!";
                 enabled: true;
             }
         }
