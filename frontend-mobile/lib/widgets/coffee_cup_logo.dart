@@ -11,19 +11,17 @@ class CoffeeCupLogo extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Hero(
         tag: 'coffee-cup',
-        child: Material(
-          child: ElevatedButton(
-            onPressed: onClick,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(48),
-            ),
-            child: Image.asset(
-              'assets/coffee_cup.png',
-              height: 200,
-              width: 200,
-              alignment: const Alignment(100, 20),
-            ),
+        child: ElevatedButton(
+          onPressed: onClick,
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(48),
+          ),
+          child: Image.asset(
+            'assets/coffee_cup.png',
+            height: 200,
+            width: 200,
+            alignment: const Alignment(100, 20),
           ),
         ),
       ),
