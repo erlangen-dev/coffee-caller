@@ -62,7 +62,7 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
     }
     return BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
       builder: (context, state) {
-        return Container(
+        return Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
