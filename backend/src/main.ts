@@ -1,13 +1,11 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { getAllowedCorsOrigins, getServerListeningPort } from "./environment";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.CORS_ALLOWED_ORIGIN || 'http://localhost:3000',
+        origin: getAllowedCorsOrigins(),
         methods: ["GET", "POST"]
     }
 });
@@ -26,6 +24,6 @@ io.on("connection", (socket) => {
     });
 });
 
-const port = process.env.PORT || 4200;
+const port = getServerListeningPort();
 httpServer.listen(port);
 console.log(`Server running on port: ${port}`);
