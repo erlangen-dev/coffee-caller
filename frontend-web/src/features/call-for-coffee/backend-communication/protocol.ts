@@ -15,18 +15,18 @@ export class Protocol {
   }
 
   public join(name: string) {
-    this.sendEvent(name, 'join');
+    this.sendCommand(name, 'join');
   }
 
   public leave(name: string) {
-    this.sendEvent(name, 'leave');
+    this.sendCommand(name, 'leave');
   }
 
   public start(name: string) {
-    this.sendEvent(name, 'start');
+    this.sendCommand(name, 'start');
   }
 
-  private sendEvent(name: string, type: MessageType) {
+  private sendCommand(name: string, type: CommandTypes) {
     this.socket.send({ name, type });
   }
 
