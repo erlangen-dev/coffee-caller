@@ -6,8 +6,8 @@ part of 'coffee_call.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_CoffeeCaller _$$_CoffeeCallerFromJson(Map<String, dynamic> json) =>
-    _$_CoffeeCaller(
+_$_CoffeeCall _$$_CoffeeCallFromJson(Map<String, dynamic> json) =>
+    _$_CoffeeCall(
       $enumDecode(_$CoffeeCallStatusEnumMap, json['status']),
       (json['participants'] as List<dynamic>).map((e) => e as String).toList(),
       (json['messages'] as List<dynamic>)
@@ -16,7 +16,7 @@ _$_CoffeeCaller _$$_CoffeeCallerFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$_CoffeeCallerToJson(_$_CoffeeCaller instance) =>
+Map<String, dynamic> _$$_CoffeeCallToJson(_$_CoffeeCall instance) =>
     <String, dynamic>{
       'status': _$CoffeeCallStatusEnumMap[instance.status]!,
       'participants': instance.participants,
@@ -25,7 +25,7 @@ Map<String, dynamic> _$$_CoffeeCallerToJson(_$_CoffeeCaller instance) =>
 
 const _$CoffeeCallStatusEnumMap = {
   CoffeeCallStatus.announced: 'announced',
-  CoffeeCallStatus.started: 'started',
+  CoffeeCallStatus.inProgress: 'inProgress',
   CoffeeCallStatus.cancelled: 'cancelled',
   CoffeeCallStatus.inactive: 'inactive',
 };

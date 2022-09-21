@@ -85,23 +85,32 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    'CoffeeCall: ${state.status.name}',
+                    'CoffeeCall: ${state.coffeeCall.status.name}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
               ),
               ListView.builder(
                 itemBuilder: (BuildContext context, index) {
+                  final message = state.coffeeCall.messages[index];
+                  final localDate = message.broadcastAt.toLocal();
+                  final hour = localDate.hour.toString().padLeft(2, '0');
+                  final minute = localDate.minute.toString().padLeft(2, '0');
+                  final second = localDate.second.toString().padLeft(2, '0');
+                  final time = '$hour:$minute:$second';
+
                   return Card(
                     margin: const EdgeInsets.all(5),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(state.messages[index]),
+                      child: Text(
+                        '${message.name} ${message.type.name}s a coffee call @$time',
+                      ),
                     ),
                   );
                 },
                 padding: const EdgeInsets.all(10),
-                itemCount: state.messages.length,
+                itemCount: state.coffeeCall.messages.length,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               ),
