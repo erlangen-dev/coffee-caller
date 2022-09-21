@@ -8,3 +8,7 @@ export function getAllowedCorsOrigins() {
 export function getServerListeningPort() {
   return process.env.PORT || 4200;
 }
+
+export function getCallDurationInSeconds() {
+  return parseInt(process.env.CALL_DURATION_IN_SECONDS ?? '', 10) || 180;
+}
