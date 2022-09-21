@@ -288,11 +288,6 @@ class _$_TimedCoffeeCallerCommand implements _TimedCoffeeCallerCommand {
   final DateTime broadcastAt;
 
   @override
-  String toString() {
-    return 'TimedCoffeeCallerCommand(type: $type, name: $name, broadcastAt: $broadcastAt)';
-  }
-
-  @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&

@@ -16,9 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CoffeeCallState {
-  CoffeeCallStatus get status => throw _privateConstructorUsedError;
   SocketConnectStatus get connectStatus => throw _privateConstructorUsedError;
-  List<String> get messages => throw _privateConstructorUsedError;
+  CoffeeCall get coffeeCall => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CoffeeCallStateCopyWith<CoffeeCallState> get copyWith =>
@@ -30,10 +29,9 @@ abstract class $CoffeeCallStateCopyWith<$Res> {
   factory $CoffeeCallStateCopyWith(
           CoffeeCallState value, $Res Function(CoffeeCallState) then) =
       _$CoffeeCallStateCopyWithImpl<$Res>;
-  $Res call(
-      {CoffeeCallStatus status,
-      SocketConnectStatus connectStatus,
-      List<String> messages});
+  $Res call({SocketConnectStatus connectStatus, CoffeeCall coffeeCall});
+
+  $CoffeeCallCopyWith<$Res> get coffeeCall;
 }
 
 /// @nodoc
@@ -47,24 +45,26 @@ class _$CoffeeCallStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? status = freezed,
     Object? connectStatus = freezed,
-    Object? messages = freezed,
+    Object? coffeeCall = freezed,
   }) {
     return _then(_value.copyWith(
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as CoffeeCallStatus,
       connectStatus: connectStatus == freezed
           ? _value.connectStatus
           : connectStatus // ignore: cast_nullable_to_non_nullable
               as SocketConnectStatus,
-      messages: messages == freezed
-          ? _value.messages
-          : messages // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      coffeeCall: coffeeCall == freezed
+          ? _value.coffeeCall
+          : coffeeCall // ignore: cast_nullable_to_non_nullable
+              as CoffeeCall,
     ));
+  }
+
+  @override
+  $CoffeeCallCopyWith<$Res> get coffeeCall {
+    return $CoffeeCallCopyWith<$Res>(_value.coffeeCall, (value) {
+      return _then(_value.copyWith(coffeeCall: value));
+    });
   }
 }
 
@@ -75,10 +75,10 @@ abstract class _$$_CoffeeCallStateCopyWith<$Res>
           _$_CoffeeCallState value, $Res Function(_$_CoffeeCallState) then) =
       __$$_CoffeeCallStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {CoffeeCallStatus status,
-      SocketConnectStatus connectStatus,
-      List<String> messages});
+  $Res call({SocketConnectStatus connectStatus, CoffeeCall coffeeCall});
+
+  @override
+  $CoffeeCallCopyWith<$Res> get coffeeCall;
 }
 
 /// @nodoc
@@ -94,23 +94,18 @@ class __$$_CoffeeCallStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? status = freezed,
     Object? connectStatus = freezed,
-    Object? messages = freezed,
+    Object? coffeeCall = freezed,
   }) {
     return _then(_$_CoffeeCallState(
-      status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as CoffeeCallStatus,
       connectStatus == freezed
           ? _value.connectStatus
           : connectStatus // ignore: cast_nullable_to_non_nullable
               as SocketConnectStatus,
-      messages == freezed
-          ? _value._messages
-          : messages // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      coffeeCall == freezed
+          ? _value.coffeeCall
+          : coffeeCall // ignore: cast_nullable_to_non_nullable
+              as CoffeeCall,
     ));
   }
 }
@@ -119,28 +114,19 @@ class __$$_CoffeeCallStateCopyWithImpl<$Res>
 
 class _$_CoffeeCallState implements _CoffeeCallState {
   const _$_CoffeeCallState(
-      [this.status = CoffeeCallStatus.unknown,
-      this.connectStatus = SocketConnectStatus.unknown,
-      final List<String> messages = const []])
-      : _messages = messages;
+      [this.connectStatus = SocketConnectStatus.unknown,
+      this.coffeeCall = const CoffeeCall(CoffeeCallStatus.inactive, [], [])]);
 
-  @override
-  @JsonKey()
-  final CoffeeCallStatus status;
   @override
   @JsonKey()
   final SocketConnectStatus connectStatus;
-  final List<String> _messages;
   @override
   @JsonKey()
-  List<String> get messages {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_messages);
-  }
+  final CoffeeCall coffeeCall;
 
   @override
   String toString() {
-    return 'CoffeeCallState(status: $status, connectStatus: $connectStatus, messages: $messages)';
+    return 'CoffeeCallState(connectStatus: $connectStatus, coffeeCall: $coffeeCall)';
   }
 
   @override
@@ -148,18 +134,17 @@ class _$_CoffeeCallState implements _CoffeeCallState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CoffeeCallState &&
-            const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality()
                 .equals(other.connectStatus, connectStatus) &&
-            const DeepCollectionEquality().equals(other._messages, _messages));
+            const DeepCollectionEquality()
+                .equals(other.coffeeCall, coffeeCall));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(connectStatus),
-      const DeepCollectionEquality().hash(_messages));
+      const DeepCollectionEquality().hash(coffeeCall));
 
   @JsonKey(ignore: true)
   @override
@@ -169,16 +154,13 @@ class _$_CoffeeCallState implements _CoffeeCallState {
 
 abstract class _CoffeeCallState implements CoffeeCallState {
   const factory _CoffeeCallState(
-      [final CoffeeCallStatus status,
-      final SocketConnectStatus connectStatus,
-      final List<String> messages]) = _$_CoffeeCallState;
+      [final SocketConnectStatus connectStatus,
+      final CoffeeCall coffeeCall]) = _$_CoffeeCallState;
 
-  @override
-  CoffeeCallStatus get status;
   @override
   SocketConnectStatus get connectStatus;
   @override
-  List<String> get messages;
+  CoffeeCall get coffeeCall;
   @override
   @JsonKey(ignore: true)
   _$$_CoffeeCallStateCopyWith<_$_CoffeeCallState> get copyWith =>

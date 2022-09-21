@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 CoffeeCall _$CoffeeCallFromJson(Map<String, dynamic> json) {
-  return _CoffeeCaller.fromJson(json);
+  return _CoffeeCall.fromJson(json);
 }
 
 /// @nodoc
@@ -74,11 +74,11 @@ class _$CoffeeCallCopyWithImpl<$Res> implements $CoffeeCallCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_CoffeeCallerCopyWith<$Res>
+abstract class _$$_CoffeeCallCopyWith<$Res>
     implements $CoffeeCallCopyWith<$Res> {
-  factory _$$_CoffeeCallerCopyWith(
-          _$_CoffeeCaller value, $Res Function(_$_CoffeeCaller) then) =
-      __$$_CoffeeCallerCopyWithImpl<$Res>;
+  factory _$$_CoffeeCallCopyWith(
+          _$_CoffeeCall value, $Res Function(_$_CoffeeCall) then) =
+      __$$_CoffeeCallCopyWithImpl<$Res>;
   @override
   $Res call(
       {CoffeeCallStatus status,
@@ -87,14 +87,14 @@ abstract class _$$_CoffeeCallerCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CoffeeCallerCopyWithImpl<$Res> extends _$CoffeeCallCopyWithImpl<$Res>
-    implements _$$_CoffeeCallerCopyWith<$Res> {
-  __$$_CoffeeCallerCopyWithImpl(
-      _$_CoffeeCaller _value, $Res Function(_$_CoffeeCaller) _then)
-      : super(_value, (v) => _then(v as _$_CoffeeCaller));
+class __$$_CoffeeCallCopyWithImpl<$Res> extends _$CoffeeCallCopyWithImpl<$Res>
+    implements _$$_CoffeeCallCopyWith<$Res> {
+  __$$_CoffeeCallCopyWithImpl(
+      _$_CoffeeCall _value, $Res Function(_$_CoffeeCall) _then)
+      : super(_value, (v) => _then(v as _$_CoffeeCall));
 
   @override
-  _$_CoffeeCaller get _value => super._value as _$_CoffeeCaller;
+  _$_CoffeeCall get _value => super._value as _$_CoffeeCall;
 
   @override
   $Res call({
@@ -102,7 +102,7 @@ class __$$_CoffeeCallerCopyWithImpl<$Res> extends _$CoffeeCallCopyWithImpl<$Res>
     Object? participants = freezed,
     Object? messages = freezed,
   }) {
-    return _then(_$_CoffeeCaller(
+    return _then(_$_CoffeeCall(
       status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -121,14 +121,14 @@ class __$$_CoffeeCallerCopyWithImpl<$Res> extends _$CoffeeCallCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_CoffeeCaller implements _CoffeeCaller {
-  _$_CoffeeCaller(this.status, final List<String> participants,
+class _$_CoffeeCall implements _CoffeeCall {
+  const _$_CoffeeCall(this.status, final List<String> participants,
       final List<TimedCoffeeCallerCommand> messages)
       : _participants = participants,
         _messages = messages;
 
-  factory _$_CoffeeCaller.fromJson(Map<String, dynamic> json) =>
-      _$$_CoffeeCallerFromJson(json);
+  factory _$_CoffeeCall.fromJson(Map<String, dynamic> json) =>
+      _$$_CoffeeCallFromJson(json);
 
   @override
   final CoffeeCallStatus status;
@@ -155,7 +155,7 @@ class _$_CoffeeCaller implements _CoffeeCaller {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CoffeeCaller &&
+            other is _$_CoffeeCall &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality()
                 .equals(other._participants, _participants) &&
@@ -172,25 +172,25 @@ class _$_CoffeeCaller implements _CoffeeCaller {
 
   @JsonKey(ignore: true)
   @override
-  _$$_CoffeeCallerCopyWith<_$_CoffeeCaller> get copyWith =>
-      __$$_CoffeeCallerCopyWithImpl<_$_CoffeeCaller>(this, _$identity);
+  _$$_CoffeeCallCopyWith<_$_CoffeeCall> get copyWith =>
+      __$$_CoffeeCallCopyWithImpl<_$_CoffeeCall>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CoffeeCallerToJson(
+    return _$$_CoffeeCallToJson(
       this,
     );
   }
 }
 
-abstract class _CoffeeCaller implements CoffeeCall {
-  factory _CoffeeCaller(
+abstract class _CoffeeCall implements CoffeeCall {
+  const factory _CoffeeCall(
       final CoffeeCallStatus status,
       final List<String> participants,
-      final List<TimedCoffeeCallerCommand> messages) = _$_CoffeeCaller;
+      final List<TimedCoffeeCallerCommand> messages) = _$_CoffeeCall;
 
-  factory _CoffeeCaller.fromJson(Map<String, dynamic> json) =
-      _$_CoffeeCaller.fromJson;
+  factory _CoffeeCall.fromJson(Map<String, dynamic> json) =
+      _$_CoffeeCall.fromJson;
 
   @override
   CoffeeCallStatus get status;
@@ -200,6 +200,6 @@ abstract class _CoffeeCaller implements CoffeeCall {
   List<TimedCoffeeCallerCommand> get messages;
   @override
   @JsonKey(ignore: true)
-  _$$_CoffeeCallerCopyWith<_$_CoffeeCaller> get copyWith =>
+  _$$_CoffeeCallCopyWith<_$_CoffeeCall> get copyWith =>
       throw _privateConstructorUsedError;
 }
