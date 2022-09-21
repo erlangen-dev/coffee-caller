@@ -2,7 +2,7 @@ import { Component, For, Show } from 'solid-js';
 
 import { getUsername } from '@features/settings';
 import { fromWithDefault } from '../shared/reactivity';
-import { aggregatedCoffeeCall, Protocol, SocketClient, CoffeeCall, CoffeeCallState, ButtonRow } from '@features/call-for-coffee';
+import { Protocol, SocketClient, CoffeeCallState, ButtonRow, emptyCoffeeCall } from '@features/call-for-coffee';
 
 export const CoffeeCallPage: Component = () => {
   const client = new SocketClient();
@@ -10,7 +10,7 @@ export const CoffeeCallPage: Component = () => {
 
   const username = getUsername(); // TODO: This is not reactive!
 
-  const coffeeCall = fromWithDefault(aggregatedCoffeeCall(protocol.messages), new CoffeeCall([]));
+  const coffeeCall = fromWithDefault(protocol.messages, emptyCoffeeCall);
 
   return (
     <>
