@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:coffee_caller/communication/models/coffee_call.dart' as model;
+import 'package:coffee_caller/communication/models/coffee_caller_command.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/main.dart';
 import 'package:coffee_caller/storage/settings_storage.dart';
@@ -7,11 +9,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeSocketClient extends Fake implements SocketClient {
-  StreamController<String> messageController = StreamController();
+  StreamController<model.CoffeeCall> messageController = StreamController();
   StreamController<SocketConnectStatus> statusController = StreamController();
 
   @override
-  Stream<String> get coffeeMessage => messageController.stream;
+  Stream<model.CoffeeCall> get coffeeCallsStream => messageController.stream;
 
   @override
   Stream<SocketConnectStatus> connect() => statusController.stream;
@@ -30,11 +32,19 @@ void main() {
     await tester.pumpWidget(App(socketClient: socket));
     await tester.pump();
 
-    socket.messageController.add('''{
-      "type": "join",
-      "name": "Hello World",
-      "broadcastAt": "2022-09-15T07:28:45.119Z"
-    }''');
+    socket.messageController.add(
+      model.CoffeeCall(
+        model.CoffeeCallStatus.announced,
+        ['Hello World'],
+        [
+          TimedCoffeeCallerCommand(
+            CoffeeCallerCommandType.join,
+            'Hello World',
+            DateTime(2022),
+          )
+        ],
+      ),
+    );
     await tester.pump();
 
     expect(

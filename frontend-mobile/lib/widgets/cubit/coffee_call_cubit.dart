@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
-import 'package:coffee_caller/communication/models/coffee_caller_message.dart';
+import 'package:coffee_caller/communication/models/coffee_call.dart';
 import 'package:coffee_caller/storage/settings_storage.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_state.dart';
 
@@ -12,19 +12,8 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
   }) : super(const CoffeeCallState());
 
   void init() {
-    protocol.messages.listen((message) {
-      final localDate = message.broadcastAt.toLocal();
-      final hour = localDate.hour.toString().padLeft(2, '0');
-      final minute = localDate.minute.toString().padLeft(2, '0');
-      final second = localDate.second.toString().padLeft(2, '0');
-      final time = '$hour:$minute:$second';
-
-      var newStatus = _getNextStatusByMessageType(message.type);
-
-      emit(state.copyWith(status: newStatus, messages: [
-        ...state.messages,
-        '${message.name} ${message.type.name}s a coffee call @$time',
-      ]));
+    protocol.coffeeCalls.listen((message) {
+      emit(state.copyWith(coffeeCall: message));
     });
 
     protocol
@@ -33,11 +22,11 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
   }
 
   void next() {
-    if (state.status == CoffeeCallStatus.unknown) {
+    if (state.coffeeCall.status == CoffeeCallStatus.inactive) {
       _join();
       return;
     }
-    if (state.status == CoffeeCallStatus.initiated) {
+    if (state.coffeeCall.status == CoffeeCallStatus.announced) {
       _start();
       return;
     }
@@ -54,16 +43,5 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
 
   void _leave() async {
     protocol.leave(await getUsername());
-  }
-
-  CoffeeCallStatus _getNextStatusByMessageType(
-      CoffeeCallerMessageType messageType) {
-    if (messageType == CoffeeCallerMessageType.join) {
-      return CoffeeCallStatus.initiated;
-    }
-    if (messageType == CoffeeCallerMessageType.start) {
-      return CoffeeCallStatus.started;
-    }
-    return CoffeeCallStatus.unknown;
   }
 }
