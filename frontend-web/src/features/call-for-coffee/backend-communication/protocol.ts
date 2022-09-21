@@ -1,28 +1,12 @@
-import { catchError, map, Observable } from "rxjs";
+import { catchError, Observable } from "rxjs";
+import { CoffeeCall, CommandTypes } from "./models";
 import { SocketClient } from "./socket-client";
-
-const messageTypes = ['join', 'leave', 'start'] as const;
-type MessageType = typeof messageTypes[number];
-
-export interface CallMessage {
-  type: MessageType;
-  name: string;
-}
-
-export interface RawCallMessage extends CallMessage {
-  broadcastAt: string;
-}
-
-export interface ReceivedCallMessage extends CallMessage {
-  broadcastAt: Date;
-}
 
 export class Protocol {
   constructor(private socket: SocketClient) { }
 
-  public get messages(): Observable<ReceivedCallMessage> {
+  public get messages(): Observable<CoffeeCall> {
     return this.socket.messages.pipe(
-      map(this.parseMessage),
       catchError((err, source) => {
         console.warn('Skipping a message. Could not parse message:', err);
         return source;
@@ -46,14 +30,4 @@ export class Protocol {
     this.socket.send({ name, type });
   }
 
-  private parseMessage(message: RawCallMessage): ReceivedCallMessage {
-    if (!messageTypes.includes(message.type) || typeof message.name !== 'string') {
-      throw Error('Invalid message');
-    }
-
-    return {
-      ...message,
-      broadcastAt: new Date(message.broadcastAt)
-    };
-  }
 }
