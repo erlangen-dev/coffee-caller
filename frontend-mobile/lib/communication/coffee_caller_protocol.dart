@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:coffee_caller/communication/models/coffee_caller_message.dart';
+import 'package:coffee_caller/communication/models/coffee_caller_command.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 
 class CoffeeCallerProtocol {
-  Stream<ReceivedCoffeeCallerMessage> get messages =>
+  Stream<TimedCoffeeCallerCommand> get messages =>
       _socketClient.coffeeMessage.map(_decodeRawMessage);
 
   CoffeeCallerProtocol({required SocketClient socketClient})
@@ -16,23 +16,23 @@ class CoffeeCallerProtocol {
   Stream<SocketConnectStatus> connect() => _socketClient.connect();
 
   void join(String username) {
-    _send(CoffeeCallerMessageType.join, username);
+    _send(CoffeeCallerCommandType.join, username);
   }
 
   void start(String username) {
-    _send(CoffeeCallerMessageType.start, username);
+    _send(CoffeeCallerCommandType.start, username);
   }
 
   void leave(String username) {
-    _send(CoffeeCallerMessageType.leave, username);
+    _send(CoffeeCallerCommandType.leave, username);
   }
 
-  void _send(CoffeeCallerMessageType type, String username) {
-    final message = CoffeeCallerMessage(type, username);
+  void _send(CoffeeCallerCommandType type, String username) {
+    final message = CoffeeCallerCommand(type, username);
     _socketClient.sendMessage(jsonEncode(message));
   }
 
-  ReceivedCoffeeCallerMessage _decodeRawMessage(String rawMessage) {
-    return ReceivedCoffeeCallerMessage.fromJson(jsonDecode(rawMessage));
+  TimedCoffeeCallerCommand _decodeRawMessage(String rawMessage) {
+    return TimedCoffeeCallerCommand.fromJson(jsonDecode(rawMessage));
   }
 }
