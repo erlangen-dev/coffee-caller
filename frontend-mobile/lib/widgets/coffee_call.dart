@@ -9,6 +9,8 @@ import 'package:coffee_caller/widgets/no_username.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'cubit/settings_state.dart';
+
 class CoffeeCall extends StatelessWidget {
   const CoffeeCall({
     super.key,
@@ -28,74 +30,79 @@ class CoffeeCall extends StatelessWidget {
 class CoffeeCallBody extends StatelessWidget {
   const CoffeeCallBody({super.key});
 
-  void _onCoffeeCupClicked(BuildContext context) {
-    var username = context.read<SettingsCubit>().state.username;
+  void _onCoffeeCupClicked(BuildContext context, String username) {
     context.read<CoffeeCallCubit>().next(username);
   }
 
   @override
   Widget build(BuildContext context) {
-    var username = context.watch<SettingsCubit>().state.username;
-    if (username == '') {
-      return const NoUsername();
-    }
     return BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Stack(
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            if (settingsState.username == '') {
+              return const NoUsername();
+            }
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child:
-                        ConnectStatusIcon(connectStatus: state.connectStatus),
+                  Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: ConnectStatusIcon(
+                            connectStatus: state.connectStatus),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: CoffeeCupLogo(
+                            onClick: () => _onCoffeeCupClicked(
+                                context, settingsState.username)),
+                      ),
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: CoffeeCupLogo(
-                        onClick: () => _onCoffeeCupClicked(context)),
+                  Card(
+                    margin: const EdgeInsets.all(10),
+                    elevation: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        'CoffeeCall: ${state.coffeeCall.status.name}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    itemBuilder: (BuildContext context, index) {
+                      final message = state.coffeeCall.messages[index];
+                      final localDate = message.broadcastAt.toLocal();
+                      final hour = localDate.hour.toString().padLeft(2, '0');
+                      final minute =
+                          localDate.minute.toString().padLeft(2, '0');
+                      final second =
+                          localDate.second.toString().padLeft(2, '0');
+                      final time = '$hour:$minute:$second';
+
+                      return Card(
+                        margin: const EdgeInsets.all(5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '${message.name} ${message.type.name}s a coffee call @$time',
+                          ),
+                        ),
+                      );
+                    },
+                    padding: const EdgeInsets.all(10),
+                    itemCount: state.coffeeCall.messages.length,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
                   ),
                 ],
               ),
-              Card(
-                margin: const EdgeInsets.all(10),
-                elevation: 20,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    'CoffeeCall: ${state.coffeeCall.status.name}',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-              ),
-              ListView.builder(
-                itemBuilder: (BuildContext context, index) {
-                  final message = state.coffeeCall.messages[index];
-                  final localDate = message.broadcastAt.toLocal();
-                  final hour = localDate.hour.toString().padLeft(2, '0');
-                  final minute = localDate.minute.toString().padLeft(2, '0');
-                  final second = localDate.second.toString().padLeft(2, '0');
-                  final time = '$hour:$minute:$second';
-
-                  return Card(
-                    margin: const EdgeInsets.all(5),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${message.name} ${message.type.name}s a coffee call @$time',
-                      ),
-                    ),
-                  );
-                },
-                padding: const EdgeInsets.all(10),
-                itemCount: state.coffeeCall.messages.length,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
