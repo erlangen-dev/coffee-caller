@@ -1,11 +1,11 @@
 import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
-import 'package:coffee_caller/storage/settings_storage.dart';
 import 'package:coffee_caller/widgets/coffee_cup_logo.dart';
 import 'package:coffee_caller/widgets/connect_status_icon.dart';
-import 'package:coffee_caller/widgets/no_username.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_cubit.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_state.dart';
+import 'package:coffee_caller/widgets/cubit/settings_cubit.dart';
+import 'package:coffee_caller/widgets/no_username.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,48 +17,27 @@ class CoffeeCall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CoffeeCallCubit(
-        protocol: CoffeeCallerProtocol(
-          socketClient: context.read<SocketClient>(),
-        ),
-      )..init(),
-      child: const CoffeeCallBody(),
-    );
+        create: (context) => CoffeeCallCubit(
+            protocol: CoffeeCallerProtocol(
+                socketClient: context.read<SocketClient>()))
+          ..init(),
+        child: const CoffeeCallBody());
   }
 }
 
-class CoffeeCallBody extends StatefulWidget {
+class CoffeeCallBody extends StatelessWidget {
   const CoffeeCallBody({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _CoffeeCallBodyState();
-}
-
-class _CoffeeCallBodyState extends State<CoffeeCallBody> {
-  late String userName = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _setUsername();
-  }
-
-  void _setUsername() {
-    getUsername().then((value) {
-      setState(() {
-        userName = value;
-      });
-    });
-  }
-
-  void _onCoffeeCupClicked() {
-    context.read<CoffeeCallCubit>().next();
+  void _onCoffeeCupClicked(BuildContext context) {
+    var username = context.read<SettingsCubit>().state.username;
+    context.read<CoffeeCallCubit>().next(username);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (userName == '') {
-      return NoUsername(onUsernameSet: _setUsername);
+    var username = context.watch<SettingsCubit>().state.username;
+    if (username == '') {
+      return const NoUsername();
     }
     return BlocBuilder<CoffeeCallCubit, CoffeeCallState>(
       builder: (context, state) {
@@ -75,7 +54,8 @@ class _CoffeeCallBodyState extends State<CoffeeCallBody> {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: CoffeeCupLogo(onClick: _onCoffeeCupClicked),
+                    child: CoffeeCupLogo(
+                        onClick: () => _onCoffeeCupClicked(context)),
                   ),
                 ],
               ),

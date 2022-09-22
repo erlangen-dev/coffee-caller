@@ -1,5 +1,6 @@
-import 'package:coffee_caller/storage/settings_storage.dart';
+import 'package:coffee_caller/widgets/cubit/settings_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> navigateToSettings(BuildContext context) => Navigator.push(
       context,
@@ -19,12 +20,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    getUsername().then((value) => _usernameController.text = value);
+    _usernameController.text = context.read<SettingsCubit>().state.username;
   }
 
-  void _save() {
-    var username = _usernameController.value.text.toString();
-    setUsername(username).then((value) => Navigator.pop(context));
+  void _save() async {
+    var newUsername = _usernameController.value.text.toString();
+    await context.read<SettingsCubit>().setUsername(newUsername);
+    Navigator.pop(context);
   }
 
   @override

@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../screens/settings_screen.dart';
 
 class NoUsername extends StatelessWidget {
-  final VoidCallback onUsernameSet;
 
-  const NoUsername({super.key, required this.onUsernameSet});
+  const NoUsername({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,6 @@ class NoUsername extends StatelessWidget {
           TextButton(
             onPressed: () async {
               await navigateToSettings(context);
-              onUsernameSet();
             },
             child: const Text(
               'Settings',

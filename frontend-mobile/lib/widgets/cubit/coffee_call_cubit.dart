@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:coffee_caller/communication/coffee_caller_protocol.dart';
 import 'package:coffee_caller/communication/models/coffee_call.dart';
-import 'package:coffee_caller/storage/settings_storage.dart';
 import 'package:coffee_caller/widgets/cubit/coffee_call_state.dart';
 
 class CoffeeCallCubit extends Cubit<CoffeeCallState> {
@@ -21,27 +20,15 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
         .listen((status) => emit(state.copyWith(connectStatus: status)));
   }
 
-  void next() {
+  void next(String username) {
     if (state.coffeeCall.status == CoffeeCallStatus.inactive) {
-      _join();
+      protocol.join(username);
       return;
     }
     if (state.coffeeCall.status == CoffeeCallStatus.announced) {
-      _start();
+      protocol.start(username);
       return;
     }
-    _leave();
-  }
-
-  void _join() async {
-    protocol.join(await getUsername());
-  }
-
-  void _start() async {
-    protocol.start(await getUsername());
-  }
-
-  void _leave() async {
-    protocol.leave(await getUsername());
+    protocol.leave(username);
   }
 }
