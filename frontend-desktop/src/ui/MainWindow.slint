@@ -1,5 +1,5 @@
 import { SpinBox, Button, CheckBox, Slider, LineEdit, ScrollView, ListView,
-    HorizontalBox, VerticalBox, GridBox, StandardButton } from "std-widgets.slint";
+    HorizontalBox, VerticalBox, GridBox, StandardButton, TabWidget } from "std-widgets.slint";
 
 export struct HistoryItem := {
     user: string,
@@ -13,37 +13,81 @@ export MainWindow := Window {
     callback call <=> call_btn.clicked;
     callback leave <=> leave_btn.clicked;
     callback go <=> start_btn.clicked;
+    callback save_and_reconnect(string, string);
 
     callback add_entry(string, string);
+
+    callback set_buttons(bool);
+
+    set_buttons(enabled) => {
+        call_btn.enabled = enabled;
+        leave_btn.enabled = enabled;
+        start_btn.enabled = enabled;
+    }
+
 
     property <[HistoryItem]> history-model: [
     ];
 
-    vbox := VerticalBox {
-        HorizontalBox {
-            call_btn := Button {
-                text: "Call!";
-                enabled: true;
-            }
-            leave_btn := Button {
-                text: "Leave";
-                enabled: true;
-            }
-            start_btn := Button {
-                text: "Let's go!";
-                enabled: true;
+    TabWidget {
+        Tab {
+            title: "Caller";
+            vbox := VerticalBox {
+                HorizontalBox {
+                    call_btn := Button {
+                        text: "Call!";
+                        enabled: true;
+                    }
+                    leave_btn := Button {
+                        text: "Leave";
+                        enabled: true;
+                    }
+                    start_btn := Button {
+                        text: "Let's go!";
+                        enabled: true;
+                    }
+                }
+
+                list_view := ListView {
+                    for entry in history-model:  HorizontalLayout {
+                        HorizontalBox { 
+                            Text {
+                                text: entry.user + ": " + entry.text;
+                                color: green;
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        list_view := ListView {
-            for entry in history-model:  HorizontalLayout {
+        Tab {
+            title: "Settings";
+            VerticalBox {
                 HorizontalBox { 
                     Text {
-                        text: entry.user + ": " + entry.text;
-                        color: green;
+                        text: "Username: ";
                     }
-                 }
+                    username_field := LineEdit {
+                        placeholder-text: "Username";
+                    }
+                }
+                HorizontalBox { 
+                    Text {
+                        text: "Server Address: ";
+                    }
+                    server_address_field := LineEdit {
+                        placeholder-text: "http://localhost:4200";
+                    }
+                }
+                reconnect_btn := Button {
+                    text: "Save & Close";
+                    enabled: true;
+                    clicked => {
+                        save_and_reconnect(username_field.text, server_address_field.text);
+                    }
+                }
             }
         }
     }
+    
 }
