@@ -18,7 +18,7 @@ const io = new Server<CoffeeCallerEventsMap>(httpServer, {
 });
 
 const messageSubject = new Subject<Command>();
-const processedCoffeeCalls = messageSubject.pipe(convertCommandsToCalls);
+const processedCoffeeCalls = messageSubject.pipe(convertCommandsToCalls, shareReplay(1));
 
 function broadcastCommand(command: Command) {
     const timed = { ...command, broadcastAt: new Date() };
