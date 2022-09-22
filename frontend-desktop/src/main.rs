@@ -1,15 +1,17 @@
-use rust_socketio::{Client, ClientBuilder, Payload};
-use serde::Deserialize;
+use rust_socketio::{Client, ClientBuilder, Payload, Error};
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use slint::{Timer, TimerMode};
+use slint::{Timer, TimerMode, Weak};
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::sync::Arc;
 use std::{
     rc::Rc,
     sync::{Mutex, MutexGuard},
 };
-use config::Config;
+use config::{Config, ConfigError};
 
-slint::slint!(import { MainWindow } from "src/ui/MainWindow.slint";);
+slint::include_modules!();
 
 #[derive(Deserialize, Debug)]
 struct TimedCommand {
@@ -49,15 +51,17 @@ fn websocket_error(payload: Payload, _: Client) {
     }
 }
 
-fn wsconnect(address: &str) -> Client {
+fn wsconnect(address: &str) -> Option<Client> {
     // get a socket that is connected to the admin namespace
     let socket = ClientBuilder::new(address)
         .namespace("/")
         .on("coffeeCall", receive_message)
         .on("error", websocket_error)
-        .connect()
-        .expect("Connection failed");
-    return socket;
+        .connect();
+    match socket {
+        Ok(s) => return Some(s),
+        Err(_) => return None,
+    }
 }
 
 fn text_for_call(call: &CoffeeCall) -> &'static str {
@@ -88,28 +92,46 @@ fn send(websocket: &Client, data: Value, event: &str) {
     websocket.emit(event, data).expect("Socket down");
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct CoffeeCallerConfig {
     username: String,
     server: String,
 }
 
-fn read_config(path: &str) -> CoffeeCallerConfig {
+fn read_config(path: &str) -> Result<CoffeeCallerConfig, ConfigError> {
     let settings = Config::builder()
         .add_source(config::File::with_name(path))
         .add_source(config::Environment::with_prefix("COFFEE"))
         .build()
-        .unwrap_or_default();
+        .unwrap_or_default();    
+    return settings.try_deserialize();
+}
+
+fn create_default_config() -> CoffeeCallerConfig {
     let default_config: CoffeeCallerConfig = CoffeeCallerConfig {
         username: "RustCoffee".into(),
         server: "http://localhost:4200".into(),
     };
-    let parsed: CoffeeCallerConfig = settings.try_deserialize().unwrap_or(default_config);
-    return parsed;
+    return default_config;
+}
+
+fn disable_buttons(ui: Weak<MainWindow>) {
+    ui.unwrap().invoke_set_buttons(false);
+}
+
+fn enable_buttons(ui: Weak<MainWindow>) {
+    ui.unwrap().invoke_set_buttons(true);
 }
 
 fn main() {
-    let config = Arc::new(read_config("./config"));
+
+    let config = read_config("./config");
+    let config = match config {
+        Ok(some) => some,
+        Err(_) => create_default_config(),
+    };
+    
+    let config = Arc::new(config);
     let ui: MainWindow = MainWindow::new();
     let websocket_client = Arc::new(wsconnect(&config.server));
 
@@ -120,10 +142,17 @@ fn main() {
     ]));
 
     let main_window_weak = ui.as_weak();
+    {
+        let websocket_client = websocket_client.clone();
+        match websocket_client.as_ref() {
+            Some(_) => (),
+            None => disable_buttons(main_window_weak),
+        }
+    }
     let history_model_clone = history_model.clone();
     timer.start(
         TimerMode::Repeated,
-        std::time::Duration::from_millis(2),
+        std::time::Duration::from_millis(1),
         move || {
             let mut guard: MutexGuard<'_, Option<CoffeeCall>> = MUTEX.lock().unwrap();
             if let Some(item) = &*guard {
@@ -145,24 +174,51 @@ fn main() {
         let websocket_client = websocket_client.clone();
         let config = config.clone();
         move || {
-            let json_payload = json!({"name": "RustCoffee", "type": "join"});
-            send(&websocket_client, json_payload, "coffeeRequest");
+            let json_payload = json!({"name": &config.username, "type": "join"});
+            match websocket_client.as_ref() {
+                Some(x) => send(x, json_payload, "coffeeRequest"),
+                None => (),
+            }
         }
     });
     ui.on_go({
         let websocket_client = websocket_client.clone();
         let config = config.clone();
         move || {
-            let json_payload = json!({"name": "RustCoffee", "type": "start"});
-            send(&websocket_client, json_payload, "coffeeRequest");
+
+            let json_payload = json!({"name": &config.username, "type": "start"});
+            match websocket_client.as_ref() {
+                Some(x) => send(x, json_payload, "coffeeRequest"),
+                None => (),
+            }
+        }
+    });
+    ui.on_save_and_reconnect({
+        let main_window_weak = ui.as_weak();
+        let config = config.clone();
+        move |name, address| {
+            let new_config = CoffeeCallerConfig { username: name.as_str().into(), server: address.as_str().into() };
+            let toml = toml::to_string(&new_config).unwrap();
+            let file = OpenOptions::new().write(true).create(true).truncate(true).open("config.toml");
+            match file {
+                Ok(mut x) => x.write_all(toml.as_bytes()).unwrap(),
+                Err(_) => eprintln!("Couldn't write config file"),
+            }
+            match slint::quit_event_loop() {
+                Ok(_) => (),
+                Err(x) => eprintln!("{:#?}", x)
+            }
         }
     });
     ui.on_leave({
         let websocket_client = websocket_client.clone();
         let config = config.clone();
         move || {
-            let json_payload = json!({"name": "RustCoffee", "type": "leave"});
-            send(&websocket_client, json_payload, "coffeeRequest");
+            let json_payload = json!({"name": &config.username, "type": "leave"});
+            match websocket_client.as_ref() {
+                Some(x) => send(x, json_payload, "coffeeRequest"),
+                None => (),
+            }
         }
     });
     ui.on_add_entry({
