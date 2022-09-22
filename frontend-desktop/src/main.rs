@@ -11,17 +11,26 @@ use std::{
 slint::slint!(import { MainWindow } from "src/ui/MainWindow.slint";);
 
 #[derive(Deserialize, Debug)]
-struct ReceivedMessage {
+struct TimedCommand {
     name: String,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     message_type: String,
+    #[serde(rename = "broadcastAt")]
+    broadcast_at: chrono::DateTime<chrono::Utc>,
 }
 
-static MUTEX: Mutex<Option<ReceivedMessage>> = Mutex::new(None);
+#[derive(Deserialize, Debug)]
+struct CoffeeCall {
+    status: String,
+    participants: Vec<String>,
+    messages: Vec<TimedCommand>,
+}
+
+static MUTEX: Mutex<Option<CoffeeCall>> = Mutex::new(None);
 
 fn receive_string_message(data: &str, _socket: Client) {
-    let received_message: ReceivedMessage = serde_json::from_str(data).unwrap();
-    let mut guard: MutexGuard<'_, Option<ReceivedMessage>> = MUTEX.lock().unwrap();
+    let received_message: CoffeeCall = serde_json::from_str(data).unwrap();
+    let mut guard: MutexGuard<'_, Option<CoffeeCall>> = MUTEX.lock().unwrap();
     *guard = Some(received_message);
 }
 
@@ -43,14 +52,25 @@ fn wsconnect() -> Client {
     // get a socket that is connected to the admin namespace
     let socket = ClientBuilder::new("http://localhost:4200")
         .namespace("/")
-        .on("coffee", receive_message)
+        .on("coffeeCalls", receive_message)
         .on("error", websocket_error)
         .connect()
         .expect("Connection failed");
     return socket;
 }
 
-fn text_for_message(message: &ReceivedMessage) -> &'static str {
+fn text_for_call(call: &CoffeeCall) -> &'static str {
+    match call.status.as_str() {
+        "announced" => return "coffee call was announced",
+        "inProgress" => return "coffee call was started",
+        "cancelled" => return "coffee call was cancelled",
+        "inactive" => return "no coffee call atm",
+        _ => eprintln!("Incorrect call status received: {:#?}", call.status),
+    }
+    return "";
+}
+
+fn text_for_message(message: &TimedCommand) -> &'static str {
     match message.message_type.as_str() {
         "join" => return "wants to go for a coffee",
         "leave" => return "decided against getting a coffee",
@@ -83,13 +103,18 @@ fn main() {
         TimerMode::Repeated,
         std::time::Duration::from_millis(2),
         move || {
-            let mut guard: MutexGuard<'_, Option<ReceivedMessage>> = MUTEX.lock().unwrap();
+            let mut guard: MutexGuard<'_, Option<CoffeeCall>> = MUTEX.lock().unwrap();
             if let Some(item) = &*guard {
-                let history_item: HistoryItem = HistoryItem {
-                    text: text_for_message(item).into(),
-                    user: item.name.clone().into(),
-                };
-                history_model_clone.push(history_item);
+                while slint::Model::row_count(&history_model_clone) > 0 {
+                    history_model_clone.remove(0);
+                }
+                for message in &item.messages {
+                    let history_item: HistoryItem = HistoryItem {
+                        text: text_for_message(&message).into(),
+                        user: message.name.clone().into(),
+                    };
+                    history_model_clone.push(history_item);
+                }
                 *guard = None;
             }
         },
