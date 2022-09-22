@@ -1,4 +1,4 @@
-name: Lint, check and build backend
+name: Lint, check and build frontend
 on:
   pull_request:
     branches:
@@ -6,7 +6,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./backend
+    working-directory: ./frontend-web
 
 jobs:
   build:
