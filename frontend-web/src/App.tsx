@@ -1,16 +1,18 @@
-import { NavLink, Route, Routes } from '@solidjs/router';
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import styles from './App.module.css';
+import { Header, Logo } from "@features/ui";
+import { NavLink, Route, Routes } from "@solidjs/router";
 
-import { CoffeeCallPage } from './pages/coffee-call';
-import { Header, Logo } from '@features/ui';
-import { SettingsPage } from './pages/settings';
+import styles from "./App.module.css";
+import { CoffeeCallPage } from "./pages/coffee-call";
+import { SettingsPage } from "./pages/settings";
 
 export const App: Component = () => (
   <div class={styles.App}>
     <Header>
-      <NavLink href="/" end={true} >Main</NavLink>
+      <NavLink href="/" end={true}>
+        Main
+      </NavLink>
       <NavLink href="/settings">Settings</NavLink>
     </Header>
     <Logo />
