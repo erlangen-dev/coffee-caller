@@ -1,8 +1,15 @@
-import { Component, For, Show } from 'solid-js';
+import { Component } from "solid-js";
 
-import { getUsername } from '@features/settings';
-import { fromWithDefault } from '../shared/reactivity';
-import { Protocol, SocketClient, CoffeeCallState, ButtonRow, emptyCoffeeCall } from '@features/call-for-coffee';
+import {
+  ButtonRow,
+  CoffeeCallState,
+  emptyCoffeeCall,
+  Protocol,
+  SocketClient,
+} from "@features/call-for-coffee";
+import { getUsername } from "@features/settings";
+
+import { fromWithDefault } from "../shared/reactivity";
 
 export const CoffeeCallPage: Component = () => {
   const client = new SocketClient();
@@ -15,7 +22,7 @@ export const CoffeeCallPage: Component = () => {
   return (
     <>
       <ButtonRow
-        usernameIsSet={username.trim() !== ''}
+        usernameIsSet={username.trim() !== ""}
         joinClicked={() => protocol.join(username)}
         leaveClicked={() => protocol.leave(username)}
         startClicked={() => protocol.start(username)}

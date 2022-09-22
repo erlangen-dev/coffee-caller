@@ -1,44 +1,42 @@
-import { Observable, Subject } from 'rxjs';
-import { io, Socket } from 'socket.io-client';
-import { CoffeeCall, Command } from './models';
+import { Observable, Subject } from "rxjs";
+import { io, Socket } from "socket.io-client";
+
+import { CoffeeCall, Command } from "./models";
 
 export class SocketClient {
-    private socket: Socket | undefined;
-    private messageSubject = new Subject<CoffeeCall>();
+  private socket: Socket | undefined;
 
-    constructor() {
-        this.connect();
-    }
+  private messageSubject = new Subject<CoffeeCall>();
 
-    public get messages(): Observable<CoffeeCall> {
-        return this.messageSubject.asObservable();
-    }
+  constructor() {
+    this.connect();
+  }
 
-    private connect() {
-        this.socket = io('ws://localhost:4200');
+  public get messages(): Observable<CoffeeCall> {
+    return this.messageSubject.asObservable();
+  }
 
-        this.socket.on('connect', () => {
-            console.log('Socket.io connection established');
-        });
+  private connect() {
+    this.socket = io("ws://localhost:4200");
 
-        this.socket.on('disconnect', () => {
-            console.log('Socket.io connection closed');
-        });
+    this.socket.on("connect", () => {
+      console.log("Socket.io connection established");
+    });
 
-        this.socket.on('coffeeCall', (data) => {
-            console.log('Coffee call update received:', data);
-            this.messageSubject.next(data);
-        });
-    }
+    this.socket.on("coffeeCall", (data) => {
+      console.log("Coffee call update received:", data);
+      this.messageSubject.next(data);
+    });
+  }
 
-    public send(command: Command) {
-        assertConnected(this.socket);
-        this.socket.emit('coffeeRequest', command);
-    }
+  public send(command: Command) {
+    assertConnected(this.socket);
+    this.socket.emit("coffeeRequest", command);
+  }
 }
 
 function assertConnected(socket: Socket | undefined): asserts socket is Socket {
-    if (socket === undefined) {
-        throw Error('Not connected');
-    }
+  if (socket === undefined) {
+    throw Error("Not connected");
+  }
 }

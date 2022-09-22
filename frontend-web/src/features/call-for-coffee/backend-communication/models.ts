@@ -1,4 +1,4 @@
-const commandTypes = ['join', 'leave', 'start'] as const;
+const commandTypes = ["join", "leave", "start"] as const;
 export type CommandTypes = typeof commandTypes[number];
 
 export interface Command {
@@ -10,7 +10,7 @@ export interface TimedCommand extends Command {
   broadcastAt: Date;
 }
 
-const coffeeCallStatuses = ['inactive', 'announced', 'inProgress', 'cancelled'] as const;
+const coffeeCallStatuses = ["inactive", "announced", "inProgress", "cancelled"] as const;
 export type CoffeeCallStatus = typeof coffeeCallStatuses[number];
 
 export interface CoffeeCall {

@@ -1,9 +1,11 @@
 import { delay, map, merge, Observable, of, scan, switchMap } from "rxjs";
+
 import { getCallDurationInSeconds } from "./environment";
-import { CoffeeCallStatus, TimedCommand, CoffeeCall, Command } from "./models";
+import { CoffeeCall, CoffeeCallStatus, Command, TimedCommand } from "./models";
 
 class AggregatedCoffeeCall implements CoffeeCall {
-  status: CoffeeCallStatus = 'inactive';
+  status: CoffeeCallStatus = "inactive";
+
   participants: string[] = [];
 
   constructor(public messages: TimedCommand[]) {
@@ -14,17 +16,17 @@ class AggregatedCoffeeCall implements CoffeeCall {
     const participants = new Set<string>();
     for (const message of messages) {
       switch (message.type) {
-        case 'start':
-          this.status = 'inProgress';
+        case "start":
+          this.status = "inProgress";
           participants.add(message.name);
           break;
-        case 'join':
-          if (this.status !== 'inProgress') {
-            this.status = 'announced';
+        case "join":
+          if (this.status !== "inProgress") {
+            this.status = "announced";
           }
           participants.add(message.name);
           break;
-        case 'leave':
+        case "leave":
           participants.delete(message.name);
           break;
         default:
@@ -33,7 +35,7 @@ class AggregatedCoffeeCall implements CoffeeCall {
     }
 
     if (participants.size === 0) {
-      this.status = 'cancelled';
+      this.status = "cancelled";
     }
 
     this.participants = Array.from(participants.values());
@@ -41,25 +43,24 @@ class AggregatedCoffeeCall implements CoffeeCall {
 }
 
 export function convertCommandsToCalls(commands: Observable<Command>) {
-  return commands.pipe(
-    addTimeStampToCommands,
-    aggregateCoffeeCalls
-  )
+  return commands.pipe(addTimeStampToCommands, aggregateCoffeeCalls);
 }
 
 function addTimeStampToCommands(commands: Observable<Command>): Observable<TimedCommand> {
   return map(
-    (incomingMessage: Command): TimedCommand => {
-      return ({ ...incomingMessage, broadcastAt: new Date() })
-    }
+    (incomingMessage: Command): TimedCommand => ({ ...incomingMessage, broadcastAt: new Date() })
   )(commands);
 }
 
-function aggregateCoffeeCalls(messages: Observable<TimedCommand>): Observable<AggregatedCoffeeCall> {
-  const reset = 'RESET' as const;
+function aggregateCoffeeCalls(
+  messages: Observable<TimedCommand>
+): Observable<AggregatedCoffeeCall> {
+  const reset = "RESET" as const;
   type Reset = typeof reset;
-  const accumulateMessagesUntilReset = (oldMessages: TimedCommand[], newMessage: TimedCommand | Reset) =>
-    newMessage === reset ? [] : [...oldMessages, newMessage];
+  const accumulateMessagesUntilReset = (
+    oldMessages: TimedCommand[],
+    newMessage: TimedCommand | Reset
+  ) => (newMessage === reset ? [] : [...oldMessages, newMessage]);
 
   const accumulateMessagesWindowInMs = getCallDurationInSeconds() * 1000;
 
@@ -77,7 +78,6 @@ function aggregateCoffeeCalls(messages: Observable<TimedCommand>): Observable<Ag
   );
 }
 
-
 function assertUnreachable(x: never): never {
-  throw new Error("Didn't expect to get here. Missed case-statement: " + x);
+  throw new Error(`Didn't expect to get here. Missed case-statement: ${x}`);
 }

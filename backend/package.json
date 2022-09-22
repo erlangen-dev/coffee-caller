@@ -5,7 +5,10 @@
   "scripts": {
     "serve": "node_modules/.bin/nodemon",
     "start": "ts-node ./src/main.ts",
-    "build": "tsc src/*.ts"
+    "build": "tsc src/*.ts",
+    "lint": "eslint --fix .",
+    "format": "prettier --write .",
+    "check-lint-format": "prettier --check . && eslint ."
   },
   "license": "ISC",
   "dependencies": {
@@ -21,7 +24,10 @@
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "eslint": "^8.23.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "prettier": "^2.7.1"
   }
 }
