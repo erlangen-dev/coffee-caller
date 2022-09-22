@@ -7,6 +7,7 @@ use std::{
     rc::Rc,
     sync::{Mutex, MutexGuard},
 };
+use config::Config;
 
 slint::slint!(import { MainWindow } from "src/ui/MainWindow.slint";);
 
@@ -48,9 +49,9 @@ fn websocket_error(payload: Payload, _: Client) {
     }
 }
 
-fn wsconnect() -> Client {
+fn wsconnect(address: &str) -> Client {
     // get a socket that is connected to the admin namespace
-    let socket = ClientBuilder::new("http://localhost:4200")
+    let socket = ClientBuilder::new(address)
         .namespace("/")
         .on("coffeeCall", receive_message)
         .on("error", websocket_error)
@@ -87,9 +88,30 @@ fn send(websocket: &Client, data: Value, event: &str) {
     websocket.emit(event, data).expect("Socket down");
 }
 
+#[derive(Debug, Deserialize)]
+struct CoffeeCallerConfig {
+    username: String,
+    server: String,
+}
+
+fn read_config(path: &str) -> CoffeeCallerConfig {
+    let settings = Config::builder()
+        .add_source(config::File::with_name(path))
+        .add_source(config::Environment::with_prefix("COFFEE"))
+        .build()
+        .unwrap_or_default();
+    let default_config: CoffeeCallerConfig = CoffeeCallerConfig {
+        username: "RustCoffee".into(),
+        server: "http://localhost:4200".into(),
+    };
+    let parsed: CoffeeCallerConfig = settings.try_deserialize().unwrap_or(default_config);
+    return parsed;
+}
+
 fn main() {
+    let config = Arc::new(read_config("./config"));
     let ui: MainWindow = MainWindow::new();
-    let websocket_client = Arc::new(wsconnect());
+    let websocket_client = Arc::new(wsconnect(&config.server));
 
     let timer = Timer::default();
 
@@ -121,6 +143,7 @@ fn main() {
     );
     ui.on_call({
         let websocket_client = websocket_client.clone();
+        let config = config.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "join"});
             send(&websocket_client, json_payload, "coffeeRequest");
@@ -128,6 +151,7 @@ fn main() {
     });
     ui.on_go({
         let websocket_client = websocket_client.clone();
+        let config = config.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "start"});
             send(&websocket_client, json_payload, "coffeeRequest");
@@ -135,6 +159,7 @@ fn main() {
     });
     ui.on_leave({
         let websocket_client = websocket_client.clone();
+        let config = config.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "leave"});
             send(&websocket_client, json_payload, "coffeeRequest");
