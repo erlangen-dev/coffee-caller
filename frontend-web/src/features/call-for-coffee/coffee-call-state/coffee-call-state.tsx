@@ -2,7 +2,7 @@ import { Accessor, Component, For, Show, splitProps } from "solid-js";
 import type { CoffeeCall } from "../backend-communication/models";
 
 export const CoffeeCallState: Component<{ coffeeCall: CoffeeCall }> = (props) => {
-  const participantsAsList = () => props.coffeeCall.participants.join(',');
+  const participantsAsList = () => props.coffeeCall.participants.join(', ');
 
   //TODO: always doing props.coffeeCall is super ugly, but destructuring the props naively doesn't work. can we somehow else do this?
   // We could pass in a Accessor<CoffeeCall> but this is discouraged: https://github.com/solidjs/solid/discussions/749#discussioncomment-1740120
