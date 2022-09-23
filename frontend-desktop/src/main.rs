@@ -52,7 +52,7 @@ fn wsconnect() -> Client {
     // get a socket that is connected to the admin namespace
     let socket = ClientBuilder::new("http://localhost:4200")
         .namespace("/")
-        .on("coffeeCalls", receive_message)
+        .on("coffeeCall", receive_message)
         .on("error", websocket_error)
         .connect()
         .expect("Connection failed");
@@ -123,21 +123,21 @@ fn main() {
         let websocket_client = websocket_client.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "join"});
-            send(&websocket_client, json_payload, "coffee");
+            send(&websocket_client, json_payload, "coffeeRequest");
         }
     });
     ui.on_go({
         let websocket_client = websocket_client.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "start"});
-            send(&websocket_client, json_payload, "coffee");
+            send(&websocket_client, json_payload, "coffeeRequest");
         }
     });
     ui.on_leave({
         let websocket_client = websocket_client.clone();
         move || {
             let json_payload = json!({"name": "RustCoffee", "type": "leave"});
-            send(&websocket_client, json_payload, "coffee");
+            send(&websocket_client, json_payload, "coffeeRequest");
         }
     });
     ui.on_add_entry({
