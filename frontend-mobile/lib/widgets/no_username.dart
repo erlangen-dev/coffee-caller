@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../screens/settings_screen.dart';
 
 class NoUsername extends StatelessWidget {
-
   const NoUsername({super.key});
 
   @override
