@@ -8,6 +8,6 @@ enum SettingsStatus { initial, loaded }
 class SettingsState with _$SettingsState {
   const factory SettingsState([
     @Default(SettingsStatus.initial) SettingsStatus status,
-    @Default("") String username,
+    @Default('') String username,
   ]) = _SettingsState;
 }

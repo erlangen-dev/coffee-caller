@@ -26,6 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _save() async {
     var newUsername = _usernameController.value.text.toString();
     await context.read<SettingsCubit>().setUsername(newUsername);
+    // ignore: use_build_context_synchronously
     Navigator.pop(context);
   }
 
