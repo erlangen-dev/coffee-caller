@@ -38,7 +38,7 @@ class SocketClient {
       (err) => _statusController.sink.add(SocketConnectStatus.error),
     );
 
-    _socket.on('coffeeCalls', (incomingData) {
+    _socket.on('coffeeCall', (incomingData) {
       print(incomingData);
       _coffeeCallMessagesController.sink.add(CoffeeCall.fromJson(incomingData));
     });
@@ -49,6 +49,6 @@ class SocketClient {
   void sendMessage(CoffeeCallerCommand message) {
     if (!_socket.connected) return;
 
-    _socket.emit('coffee', message);
+    _socket.emit('coffeeRequest', message);
   }
 }

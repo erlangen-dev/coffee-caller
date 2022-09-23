@@ -25,7 +25,7 @@ export class SocketClient {
             console.log('Socket.io connection closed');
         });
 
-        this.socket.on('coffeeCalls', (data) => {
+        this.socket.on('coffeeCall', (data) => {
             console.log('Coffee call update received:', data);
             this.messageSubject.next(data);
         });
@@ -33,7 +33,7 @@ export class SocketClient {
 
     public send(command: Command) {
         assertConnected(this.socket);
-        this.socket.emit('coffee', command);
+        this.socket.emit('coffeeRequest', command);
     }
 }
 

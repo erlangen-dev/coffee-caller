@@ -7,7 +7,7 @@ import { getAllowedCorsOrigins, getServerListeningPort } from "./environment";
 import { convertCommandsToCalls } from "./message-pipeline";
 
 type VoidListener<T> = (event: T) => void;
-type CoffeeCallerEventsMap = { coffee: VoidListener<TimedCommand>, coffeeCalls: VoidListener<CoffeeCall> };
+type CoffeeCallerEventsMap = { coffeeRequest: VoidListener<TimedCommand>, coffeeCall: VoidListener<CoffeeCall> };
 
 const httpServer = createServer();
 const io = new Server<CoffeeCallerEventsMap>(httpServer, {
@@ -20,12 +20,6 @@ const io = new Server<CoffeeCallerEventsMap>(httpServer, {
 const messageSubject = new Subject<Command>();
 const processedCoffeeCalls = messageSubject.pipe(convertCommandsToCalls, shareReplay(1));
 
-function broadcastCommand(command: Command) {
-    const timed = { ...command, broadcastAt: new Date() };
-    console.log('→ broadcast command msg:', timed);
-    io.sockets.emit("coffee", timed);
-}
-
 function logCommand(command: Command) {
     console.log('← received command msg:', command);
 }
@@ -37,11 +31,10 @@ function putCommandIntoPipeline(command: Command) {
 io.on("connection", (socket) => {
     console.log(`Got new connection: ${socket.id}`);
 
-    socket.on("coffee", logCommand);
-    socket.on("coffee", broadcastCommand)
-    socket.on("coffee", putCommandIntoPipeline);
+    socket.on("coffeeRequest", logCommand);
+    socket.on("coffeeRequest", putCommandIntoPipeline);
 
-    processedCoffeeCalls.subscribe((coffeeCall) => socket.emit("coffeeCalls", coffeeCall));
+    processedCoffeeCalls.subscribe((coffeeCall) => socket.emit("coffeeCall", coffeeCall));
 });
 
 const port = getServerListeningPort();
