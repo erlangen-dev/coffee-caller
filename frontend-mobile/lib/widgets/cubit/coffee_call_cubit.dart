@@ -10,13 +10,13 @@ class CoffeeCallCubit extends Cubit<CoffeeCallState> {
     required this.protocol,
   }) : super(const CoffeeCallState());
 
-  void init() {
+  void init(String serverUrl) {
     protocol.coffeeCalls.listen((message) {
       emit(state.copyWith(coffeeCall: message));
     });
 
     protocol
-        .connect()
+        .connect(serverUrl)
         .listen((status) => emit(state.copyWith(connectStatus: status)));
   }
 

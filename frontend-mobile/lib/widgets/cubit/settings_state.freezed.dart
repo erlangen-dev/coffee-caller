@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SettingsState {
   SettingsStatus get status => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
+  String get serverUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $SettingsStateCopyWith<$Res> {
   factory $SettingsStateCopyWith(
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res>;
-  $Res call({SettingsStatus status, String username});
+  $Res call({SettingsStatus status, String username, String serverUrl});
 }
 
 /// @nodoc
@@ -45,6 +46,7 @@ class _$SettingsStateCopyWithImpl<$Res>
   $Res call({
     Object? status = freezed,
     Object? username = freezed,
+    Object? serverUrl = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
@@ -54,6 +56,10 @@ class _$SettingsStateCopyWithImpl<$Res>
       username: username == freezed
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      serverUrl: serverUrl == freezed
+          ? _value.serverUrl
+          : serverUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -66,7 +72,7 @@ abstract class _$$_SettingsStateCopyWith<$Res>
           _$_SettingsState value, $Res Function(_$_SettingsState) then) =
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
-  $Res call({SettingsStatus status, String username});
+  $Res call({SettingsStatus status, String username, String serverUrl});
 }
 
 /// @nodoc
@@ -84,6 +90,7 @@ class __$$_SettingsStateCopyWithImpl<$Res>
   $Res call({
     Object? status = freezed,
     Object? username = freezed,
+    Object? serverUrl = freezed,
   }) {
     return _then(_$_SettingsState(
       status == freezed
@@ -94,6 +101,10 @@ class __$$_SettingsStateCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
+      serverUrl == freezed
+          ? _value.serverUrl
+          : serverUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -102,7 +113,9 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 
 class _$_SettingsState implements _SettingsState {
   const _$_SettingsState(
-      [this.status = SettingsStatus.initial, this.username = ""]);
+      [this.status = SettingsStatus.loading,
+      this.username = '',
+      this.serverUrl = '']);
 
   @override
   @JsonKey()
@@ -110,10 +123,13 @@ class _$_SettingsState implements _SettingsState {
   @override
   @JsonKey()
   final String username;
+  @override
+  @JsonKey()
+  final String serverUrl;
 
   @override
   String toString() {
-    return 'SettingsState(status: $status, username: $username)';
+    return 'SettingsState(status: $status, username: $username, serverUrl: $serverUrl)';
   }
 
   @override
@@ -122,14 +138,16 @@ class _$_SettingsState implements _SettingsState {
         (other.runtimeType == runtimeType &&
             other is _$_SettingsState &&
             const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.username, username));
+            const DeepCollectionEquality().equals(other.username, username) &&
+            const DeepCollectionEquality().equals(other.serverUrl, serverUrl));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(username));
+      const DeepCollectionEquality().hash(username),
+      const DeepCollectionEquality().hash(serverUrl));
 
   @JsonKey(ignore: true)
   @override
@@ -139,12 +157,16 @@ class _$_SettingsState implements _SettingsState {
 
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
-      [final SettingsStatus status, final String username]) = _$_SettingsState;
+      [final SettingsStatus status,
+      final String username,
+      final String serverUrl]) = _$_SettingsState;
 
   @override
   SettingsStatus get status;
   @override
   String get username;
+  @override
+  String get serverUrl;
   @override
   @JsonKey(ignore: true)
   _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>

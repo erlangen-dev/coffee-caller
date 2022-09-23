@@ -16,16 +16,21 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _serverUrlController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _usernameController.text = context.read<SettingsCubit>().state.username;
+    _serverUrlController.text = context.read<SettingsCubit>().state.serverUrl;
   }
 
   void _save() async {
     var newUsername = _usernameController.value.text.toString();
-    await context.read<SettingsCubit>().setUsername(newUsername);
+    var serverUrl = _serverUrlController.value.text.toString();
+    var cubit = context.read<SettingsCubit>();
+    await cubit.save(newUsername, serverUrl);
+
     // ignore: use_build_context_synchronously
     Navigator.pop(context);
   }
@@ -58,12 +63,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: _serverUrlController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Server URL',
+                ),
+              ),
+            ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(),
+              style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10)),
               onPressed: _save,
               child: const Text(
                 'Save',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 24),
               ),
             ),
           ],
