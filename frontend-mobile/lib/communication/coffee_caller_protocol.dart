@@ -12,7 +12,8 @@ class CoffeeCallerProtocol {
 
   final SocketClient _socketClient;
 
-  Stream<SocketConnectStatus> connect() => _socketClient.connect();
+  Stream<SocketConnectStatus> connect(String serverUrl) =>
+      _socketClient.connect(serverUrl);
 
   void join(String username) {
     _send(CoffeeCallerCommandType.join, username);

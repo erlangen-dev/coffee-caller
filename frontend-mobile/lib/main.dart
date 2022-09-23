@@ -1,4 +1,3 @@
-import 'package:coffee_caller/environment.dart';
 import 'package:coffee_caller/communication/socket_client.dart';
 import 'package:coffee_caller/screens/home_screen.dart';
 import 'package:coffee_caller/theme.dart';
@@ -8,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  final socketClient = SocketClient(Environment.backendUrl);
+  final socketClient = SocketClient();
   runApp(App(socketClient: socketClient));
 }
 

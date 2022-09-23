@@ -10,17 +10,16 @@ class SocketClient {
   Stream<CoffeeCall> get coffeeCallsStream =>
       _coffeeCallMessagesController.stream;
 
-  SocketClient(String serverUrl)
-      : _socket = socket_io.io(serverUrl, <String, dynamic>{
-          'autoConnect': false,
-          'transports': ['websocket']
-        });
-
-  final socket_io.Socket _socket;
+  late final socket_io.Socket _socket;
   final _statusController = StreamController<SocketConnectStatus>();
   final _coffeeCallMessagesController = StreamController<CoffeeCall>();
 
-  Stream<SocketConnectStatus> connect() {
+  Stream<SocketConnectStatus> connect(String serverUrl) {
+    _socket = socket_io.io(serverUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket']
+    });
+
     _statusController.sink.add(SocketConnectStatus.connecting);
     _socket.connect();
 

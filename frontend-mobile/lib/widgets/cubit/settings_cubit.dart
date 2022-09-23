@@ -7,11 +7,27 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void init() async {
     var username = await storage.getUsername();
-    emit(state.copyWith(status: SettingsStatus.loaded, username: username));
+    var serverUrl = await storage.getServerUrl();
+    emit(state.copyWith(
+        status: SettingsStatus.loaded,
+        username: username,
+        serverUrl: serverUrl));
   }
 
-  Future<void> setUsername(String newUsername) async {
-    await storage.setUsername(newUsername);
-    emit(state.copyWith(username: newUsername));
+  Future<void> save(String username, String serverUrl) async {
+    emit(state.copyWith(status: SettingsStatus.loading));
+    await storage.setUsername(username);
+    await storage.setUsername(serverUrl);
+    emit(state.copyWith(
+        username: username,
+        serverUrl: serverUrl,
+        status: getNextState(username, serverUrl)));
+  }
+
+  SettingsStatus getNextState(String username, String serverUrl) {
+    if (username != '' && serverUrl != '') {
+      return SettingsStatus.loaded;
+    }
+    return SettingsStatus.invalid;
   }
 }
