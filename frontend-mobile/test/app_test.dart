@@ -16,7 +16,8 @@ class FakeSocketClient extends Fake implements SocketClient {
   Stream<model.CoffeeCall> get coffeeCallsStream => messageController.stream;
 
   @override
-  Stream<SocketConnectStatus> connect() => statusController.stream;
+  Stream<SocketConnectStatus> connect(String serverUrl) =>
+      statusController.stream;
 }
 
 void main() {
