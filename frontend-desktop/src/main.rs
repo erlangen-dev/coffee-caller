@@ -2,7 +2,7 @@ use rust_socketio::{Client, ClientBuilder, Payload, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use slint::{Timer, TimerMode, Weak};
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, create_dir_all};
 use std::io::Write;
 use std::sync::Arc;
 use std::{
@@ -10,6 +10,7 @@ use std::{
     sync::{Mutex, MutexGuard},
 };
 use config::{Config, ConfigError};
+use dirs::config_dir;
 
 slint::include_modules!();
 
@@ -124,8 +125,10 @@ fn enable_buttons(ui: Weak<MainWindow>) {
 }
 
 fn main() {
-
-    let config = read_config("./config");
+    let mut config_path = config_dir().unwrap();
+    config_path.push("coffeecaller");
+    config_path.push("config.toml");
+    let config = read_config(config_path.to_str().unwrap());
     let config = match config {
         Ok(some) => some,
         Err(_) => create_default_config(),
@@ -199,10 +202,11 @@ fn main() {
         move |name, address| {
             let new_config = CoffeeCallerConfig { username: name.as_str().into(), server: address.as_str().into() };
             let toml = toml::to_string(&new_config).unwrap();
-            let file = OpenOptions::new().write(true).create(true).truncate(true).open("config.toml");
+            if let Some(p) = config_path.parent() { create_dir_all(p).unwrap(); };
+            let file = OpenOptions::new().write(true).create(true).truncate(true).open(config_path.to_str().unwrap());
             match file {
                 Ok(mut x) => x.write_all(toml.as_bytes()).unwrap(),
-                Err(_) => eprintln!("Couldn't write config file"),
+                Err(e) => eprintln!("Couldn't write config file {:#?}", e),
             }
             match slint::quit_event_loop() {
                 Ok(_) => (),
