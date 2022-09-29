@@ -6,10 +6,10 @@
     C4Context
       title System Context diagram for CoffeeCaller
       Boundary(b0, "CoffeeCaller") {
-        System(CoffeeCallerBackend, "Coffee Caller Backend")
-        System(CoffeeCallerWebFrontend, "Coffee Caller Web Frontend")
-        System(CoffeeCallerDesktopFrontend, "Coffee Caller Desktop Frontend")
-        System(CoffeeCallerMobileFrontend, "Coffee Caller Mobile Frontend")
+        System(CoffeeCallerBackend, "Backend")
+        System(CoffeeCallerWebFrontend, "Web Frontend")
+        System(CoffeeCallerDesktopFrontend, "Desktop Frontend")
+        System(CoffeeCallerMobileFrontend, "Mobile Frontend")
       }
       BiRel(CoffeeCallerBackend, CoffeeCallerWebFrontend, "Connects")
       BiRel(CoffeeCallerBackend, CoffeeCallerDesktopFrontend, "Connects")
