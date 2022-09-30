@@ -54,8 +54,15 @@ sequenceDiagram
 
 ## Frontend setup
 
+### Web-UI
 - Install [fvm](https://fvm.app)
 - Run `fvm flutter run` to start the app
+- ???
+- Profit!
+
+### Rust
+- Install [rust/cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)
+- Run `cargo run` in the `frontend-desktop` folder to start the app
 - ???
 - Profit!
 
