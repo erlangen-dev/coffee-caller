@@ -54,7 +54,7 @@ sequenceDiagram
 
 ## Frontend setup
 
-### Web-UI
+### Mobile-UI
 - Install [fvm](https://fvm.app)
 - Run `fvm flutter run` to start the app
 - ???
